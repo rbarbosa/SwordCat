@@ -11,7 +11,7 @@ import SwiftUI
 struct SwordCatApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppView()
         }
     }
 }
