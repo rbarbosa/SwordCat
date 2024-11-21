@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Mocks
 
 #if DEBUG
-extension ImagesRepository {
+extension CatBreadsRepository {
     static var success: Self {
         .init(
             fetchImages: {

@@ -13,7 +13,7 @@ struct AppView: View {
             CatBreedsView(
                 viewModel: .init(
                     initialState: .init(breeds: []),
-                    imagesRepository: .live
+                    repository: .live
                 )
             )
             .tabItem {

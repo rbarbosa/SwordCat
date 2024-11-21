@@ -31,16 +31,16 @@ final class CatBreedsViewModel {
     // MARK: - Properties
 
     private(set) var state: State
-    private let imagesRepository: ImagesRepository
+    private let repository: CatBreadsRepository
 
     // MARK: - Initialization
 
     init(
         initialState: State,
-        imagesRepository: ImagesRepository
+        repository: CatBreadsRepository
     ) {
         self.state = initialState
-        self.imagesRepository = imagesRepository
+        self.repository = repository
     }
 
     func send(_ action: Action) {

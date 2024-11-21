@@ -9,8 +9,8 @@ import Foundation
 
 // MARK: - Live implementation
 
-extension ImagesRepository {
-    static var live: ImagesRepository {
+extension CatBreadsRepository {
+    static var live: CatBreadsRepository {
         let networking = Networking()
 
         return .init(
