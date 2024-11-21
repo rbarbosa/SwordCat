@@ -17,6 +17,10 @@ extension CatBreedsRepository {
             fetchImages: {
                 let data = try await networking.fetchURL(forQuery: .images(page: 0))
                 return try makeImagesRepositoryResponse(from: data)
+            },
+            fetchBreeds: { page in
+                let data = try await networking.fetchURL(forQuery: .breeds(page: page))
+                return try makeBreedsRepositoryResponse(from: data)
             }
         )
     }

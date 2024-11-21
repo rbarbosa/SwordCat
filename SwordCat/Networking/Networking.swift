@@ -93,6 +93,7 @@ enum QueryType {
 
         case .breeds(page: let page):
             items.append(.init(name: "page", value: String(page)))
+            items.append(.init(name: "limit", value: "10"))
 
         case .searchBreed(let query):
             items.append(.init(name: "q", value: query))

@@ -9,7 +9,6 @@ import Foundation
 
 struct CatBreedsRepository {
     var fetchImages: () async throws -> ImagesRepositoryResponse
+
+    var fetchBreeds: (_ page: Int) async throws -> BreedsRepositoryResponse
 }
-
-
-
