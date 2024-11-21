@@ -18,11 +18,13 @@ final class CatBreedsViewModel {
     // MARK: - State
 
     struct State {
+        var breeds: [Breed]
     }
 
     // MARK: - Action
 
     enum Action {
+        case onAppear
     }
 
     // MARK: - Properties
@@ -37,6 +39,14 @@ final class CatBreedsViewModel {
 
     func send(_ action: Action) {
         switch action {
+        case .onAppear:
+            // Start searching
+            fetchBreeds()
         }
+    }
+
+    private func fetchBreeds() {
+        // Implement fetch
+        state.breeds = [.mock]
     }
 }
