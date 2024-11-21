@@ -53,7 +53,7 @@ final class CatBreedsViewModel {
 
     private func fetchBreeds() {
         Task {
-            let response = try await imagesRepository.fetchImages()
+            let response = try await repository.fetchImages()
             state.breeds = response.breeds
         }
     }
