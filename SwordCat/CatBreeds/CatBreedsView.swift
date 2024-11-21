@@ -15,7 +15,7 @@ struct CatBreedsView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading) {
-                    ForEach(viewModel.state.breeds, id: \.id) { breed in
+                    ForEach(viewModel.breeds, id: \.id) { breed in
                         breedCard(breed)
                     }
                 }

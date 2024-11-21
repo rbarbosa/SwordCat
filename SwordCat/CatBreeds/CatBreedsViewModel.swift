@@ -8,6 +8,7 @@
 import Foundation
 
 @Observable
+@dynamicMemberLookup
 final class CatBreedsViewModel {
 
     // MARK: - Destination
@@ -55,5 +56,11 @@ final class CatBreedsViewModel {
             let response = try await imagesRepository.fetchImages()
             state.breeds = response.breeds
         }
+    }
+}
+
+extension CatBreedsViewModel {
+    subscript<T>(dynamicMember keyPath: KeyPath<State, T>) -> T {
+        get { state[keyPath: keyPath] }
     }
 }
