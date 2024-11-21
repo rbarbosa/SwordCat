@@ -63,8 +63,6 @@ func makeImagesRepositoryResponse(from data: Data) throws -> ImagesRepositoryRes
 
         return .init(breeds: breeds)
     } catch {
-        // TODO: - Create Custom error enum
-        let errorDescription = "Failed to decode images repository response: \(error)"
-        throw DecodingError.valueNotFound(URL.self, .init(codingPath: [], debugDescription: errorDescription))
+        throw NetworkingError.decodingFailed(error)
     }
 }
