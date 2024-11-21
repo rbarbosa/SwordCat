@@ -66,7 +66,8 @@ struct CatBreedsView: View {
 #Preview {
     CatBreedsView(
         viewModel: .init(
-            initialState: .init(breeds: [])
+            initialState: .init(breeds: []),
+            imagesRepository: .success
         )
     )
 }

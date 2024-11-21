@@ -30,11 +30,16 @@ final class CatBreedsViewModel {
     // MARK: - Properties
 
     private(set) var state: State
+    private let imagesRepository: ImagesRepository
 
     // MARK: - Initialization
 
-    init(initialState: State) {
+    init(
+        initialState: State,
+        imagesRepository: ImagesRepository
+    ) {
         self.state = initialState
+        self.imagesRepository = imagesRepository
     }
 
     func send(_ action: Action) {
@@ -46,7 +51,9 @@ final class CatBreedsViewModel {
     }
 
     private func fetchBreeds() {
-        // Implement fetch
-        state.breeds = [.mock]
+        Task {
+            let response = try await imagesRepository.fetchImages()
+            state.breeds = response.breeds
+        }
     }
 }
