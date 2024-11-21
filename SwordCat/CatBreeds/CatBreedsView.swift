@@ -43,6 +43,9 @@ struct CatBreedsView: View {
                     .font(.system(size: 20))
             }
         }
+        .onAppear {
+            viewModel.send(.onCardBreedAppear(breed))
+        }
     }
 
     private func image(for breed: Breed) -> some View {
