@@ -31,13 +31,13 @@ final class CatBreedsViewModel {
     // MARK: - Properties
 
     private(set) var state: State
-    private let repository: CatBreadsRepository
+    private let repository: CatBreedsRepository
 
     // MARK: - Initialization
 
     init(
         initialState: State,
-        repository: CatBreadsRepository
+        repository: CatBreedsRepository
     ) {
         self.state = initialState
         self.repository = repository

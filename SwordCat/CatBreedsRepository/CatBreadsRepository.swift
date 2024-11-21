@@ -1,5 +1,5 @@
 //
-//  CatBreadsRepository.swift
+//  CatBreedsRepository.swift
 //  SwordCat
 //
 //  Created by Rui Barbosa on 21/11/2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CatBreadsRepository {
+struct CatBreedsRepository {
     var fetchImages: () async throws -> ImagesRepositoryResponse
 }
 

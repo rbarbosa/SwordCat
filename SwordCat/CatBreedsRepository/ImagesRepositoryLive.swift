@@ -1,5 +1,5 @@
 //
-//  ImagesRepositoryLive.swift
+//  CatBreedsRepository.swift
 //  SwordCat
 //
 //  Created by Rui Barbosa on 21/11/2024.
@@ -9,8 +9,8 @@ import Foundation
 
 // MARK: - Live implementation
 
-extension CatBreadsRepository {
-    static var live: CatBreadsRepository {
+extension CatBreedsRepository {
+    static var live: CatBreedsRepository {
         let networking = Networking()
 
         return .init(
