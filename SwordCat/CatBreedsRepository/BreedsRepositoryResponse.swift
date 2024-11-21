@@ -19,7 +19,7 @@ private struct BreedResponse: Decodable {
     let lifeSpan: String
     let name: String
     let temperament: String
-    let image: ImageResponse
+    let image: ImageResponse?
 
     enum CodingKeys: String, CodingKey {
         case description
@@ -39,12 +39,14 @@ func makeBreedsRepositoryResponse(from data: Data) throws -> BreedsRepositoryRes
     do {
         let breedsResponse = try JSONDecoder().decode([BreedResponse].self, from: data)
         let breeds: [Breed] = breedsResponse.compactMap { breedResponse in
-            guard let imageUrl = URL(string: breedResponse.image.url) else { return nil }
+            guard
+                let image = breedResponse.image,
+                let imageUrl = URL(string: image.url) else { return nil }
 
             return .init(
                 description: breedResponse.description,
                 id: breedResponse.id,
-                imageURLString: breedResponse.image.url,
+                imageURLString: imageUrl.absoluteString,
                 lifeSpan: breedResponse.lifeSpan,
                 name: breedResponse.name,
                 temperament: breedResponse.temperament,
