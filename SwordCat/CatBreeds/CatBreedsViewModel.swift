@@ -7,6 +7,13 @@
 
 import Foundation
 
+struct Pagination {
+    var hasMoreItems: Bool = true
+    var limit: Int = 10
+    var nextPage: Int = 0
+    var thresholdItemId: String?
+}
+
 @Observable
 @dynamicMemberLookup
 final class CatBreedsViewModel {
@@ -21,21 +28,21 @@ final class CatBreedsViewModel {
     struct State {
         var breeds: [Breed] {
             didSet {
-                if hasMoreItems {
+                print("breeds updated - count: \(breeds.count)")
+                if pagination.hasMoreItems {
                     updateThresholdItemId()
                 }
             }
         }
+
         var isLoading: Bool = false
-        var nextPage: Int = 0
-        var hasMoreItems: Bool = true
-        var thresholdItemId: String?
+        var pagination: Pagination = .init()
 
         mutating func updateThresholdItemId() {
             let index = breeds.count - 3
             guard index > 0 else { return }
 
-            thresholdItemId = breeds[index].id
+            pagination.thresholdItemId = breeds[index].id
         }
     }
 
@@ -71,6 +78,7 @@ final class CatBreedsViewModel {
             fetchBreeds(page: 0)
 
         case .onCardBreedAppear(let breed):
+            print("Card breed \(breed.name) appeared")
             handleItemAppeared(breed)
         }
     }
@@ -83,11 +91,12 @@ final class CatBreedsViewModel {
 
                 state.isLoading = false
                 state.breeds.append(contentsOf: response.breeds)
-                state.hasMoreItems = response.breeds.count > 0
-                if state.hasMoreItems {
-                    state.nextPage += 1
+
+                state.pagination.hasMoreItems = response.breeds.count > 0
+                if state.pagination.hasMoreItems {
+                    state.pagination.nextPage += 1
                 } else {
-                    state.thresholdItemId = nil
+                    state.pagination.thresholdItemId = nil
                 }
             } catch {
                 print("Got error fetching breeds: \(error)")
@@ -97,14 +106,14 @@ final class CatBreedsViewModel {
 
     private func handleItemAppeared(_ breed: Breed) {
         guard
-            state.hasMoreItems,
-            let thresholdItemId = state.thresholdItemId,
+            state.pagination.hasMoreItems,
+            let thresholdItemId = state.pagination.thresholdItemId,
             breed.id == thresholdItemId
         else {
             return
         }
 
-        fetchBreeds(page: state.nextPage)
+        fetchBreeds(page: state.pagination.nextPage)
     }
 }
 
