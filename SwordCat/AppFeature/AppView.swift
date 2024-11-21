@@ -10,10 +10,15 @@ import SwiftUI
 struct AppView: View {
     var body: some View {
         TabView {
-            Text("Cats breed list")
-                .tabItem {
-                    Label("Cats", systemImage: "cat.fill")
-                }
+            CatBreedsView(
+                viewModel: .init(
+                    initialState: .init(breeds: []),
+                    imagesRepository: .live
+                )
+            )
+            .tabItem {
+                Label("Cats", systemImage: "cat.fill")
+            }
 
             Text("Favorites")
                 .tabItem {
