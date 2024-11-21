@@ -12,7 +12,4 @@ struct ImagesRepository {
 }
 
 
-struct ImagesRepositoryResponse {
-    let breeds: [Breed]
-}
 
