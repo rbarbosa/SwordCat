@@ -46,14 +46,14 @@ final class CatBreedsViewModel {
     func send(_ action: Action) {
         switch action {
         case .onAppear:
-            // Start searching
             fetchBreeds()
         }
     }
 
     private func fetchBreeds() {
         Task {
-            let response = try await repository.fetchImages()
+//            let response = try await repository.fetchImages()
+            let response = try await repository.fetchBreeds(0)
             state.breeds = response.breeds
         }
     }
