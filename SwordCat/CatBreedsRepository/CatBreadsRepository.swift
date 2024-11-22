@@ -13,4 +13,6 @@ struct CatBreedsRepository {
     var fetchBreeds: (_ page: Int) async throws -> BreedsRepositoryResponse
 
     var searchBreeds: (_ query: String) async throws -> BreedsRepositoryResponse
+
+    var markAsFavorite: (_ userId: String, _ imageId: String) async throws -> MarkAsFavoriteRepositoryResponse
 }

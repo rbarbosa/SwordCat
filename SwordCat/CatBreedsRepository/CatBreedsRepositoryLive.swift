@@ -25,6 +25,11 @@ extension CatBreedsRepository {
             searchBreeds: { query in
                 let data = try await networking.fetch(query: .searchBreed(query))
                 return try makeBreedsRepositoryResponse(from: data)
+            },
+            markAsFavorite: { userId, imageId in
+                let input = MarkFavoriteInput(userId: userId, imageId: imageId)
+                let data = try await networking.perform(mutationQuery: .markFavorite(input))
+                return try makeMarkAsFavoriteRepositoryResponse(from: data)
             }
         )
     }

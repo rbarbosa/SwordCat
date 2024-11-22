@@ -21,6 +21,9 @@ extension CatBreedsRepository {
             },
             searchBreeds: { _ in
                 .init(breeds: [.mock])
+            },
+            markAsFavorite: { _, _ in
+                .init(id: 123)
             }
         )
     }
