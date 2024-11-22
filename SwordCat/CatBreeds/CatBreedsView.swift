@@ -11,6 +11,8 @@ struct CatBreedsView: View {
 
     let viewModel: CatBreedsViewModel
 
+    @State private var searchText: String = ""
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -18,12 +20,18 @@ struct CatBreedsView: View {
                     ForEach(viewModel.breeds, id: \.id) { breed in
                         breedCard(breed)
                     }
+                    // TODO: - Add last card with loading/error states
                 }
                 .padding(.horizontal)
             }
             .navigationTitle("Cat breeds")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
         .onAppear {
             viewModel.send(.onAppear)
         }
@@ -70,7 +78,7 @@ struct CatBreedsView: View {
     CatBreedsView(
         viewModel: .init(
             initialState: .init(breeds: []),
-            repository: .success
+            repository: .live
         )
     )
 }
