@@ -10,9 +10,9 @@ import Foundation
 struct Breed {
     let description: String
     let id: String
-    let imageURLString: String
     let lifeSpan: String
     let name: String
+    let referenceImageId: String
     let temperament: String
     let url: URL
 }
@@ -24,9 +24,9 @@ extension Breed {
         .init(
             description: "The Abyssinian is easy to care for, and a joy to have in your home. They’re affectionate cats and love both people and other animals.",
             id: "abys",
-            imageURLString: "https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg",
             lifeSpan: "14 - 15",
             name: "Abyssinian",
+            referenceImageId: "0XYvRd7oD",
             temperament: "Active, Energetic, Independent, Intelligent, Gentle",
             url: URL(string: "https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg")!
         )

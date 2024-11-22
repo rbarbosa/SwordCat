@@ -28,6 +28,7 @@ private struct BreedResponse: Decodable {
     let id: String
     let lifeSpan: String
     let name: String
+    let referenceImageId: String
     let temperament: String
 
     enum CodingKeys: String, CodingKey {
@@ -35,6 +36,7 @@ private struct BreedResponse: Decodable {
         case id
         case lifeSpan = "life_span"
         case name
+        case referenceImageId = "reference_image_id"
         case temperament
     }
 }
@@ -53,9 +55,9 @@ func makeImagesRepositoryResponse(from data: Data) throws -> ImagesRepositoryRes
             return .init(
                 description: breedsResponse.description,
                 id: breedsResponse.id,
-                imageURLString: imageResponse.url,
                 lifeSpan: breedsResponse.lifeSpan,
                 name: breedsResponse.name,
+                referenceImageId: breedsResponse.referenceImageId,
                 temperament: breedsResponse.temperament,
                 url: imageUrl
             )
