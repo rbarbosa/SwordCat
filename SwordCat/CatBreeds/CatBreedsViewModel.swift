@@ -32,6 +32,7 @@ final class CatBreedsViewModel {
 
         var isLoading: Bool = false
         var isSearching: Bool = false
+        var favoriteBreedIds: [String: Bool] = [:]
         var pagination: Pagination = .init()
 
         fileprivate var fetchedBreeds: [Breed] = []
@@ -43,11 +44,16 @@ final class CatBreedsViewModel {
 
             pagination.thresholdItemId = breeds[index].id
         }
+
+        func isFavorite(_ breed: Breed) -> Bool {
+            favoriteBreedIds[breed.id] ?? false
+        }
     }
 
     // MARK: - Action
 
     enum Action {
+        case favoriteButtonTapped(Breed)
         case search(String)
         case onAppear
         case onCardBreedAppear(Breed)
@@ -74,6 +80,10 @@ final class CatBreedsViewModel {
 
     func send(_ action: Action) {
         switch action {
+        case .favoriteButtonTapped(let breed):
+            print("Favorite button tapped for \(breed.name)")
+            handleFavoriteTapped(breed)
+
         case .search(let query):
             state.isSearching = !query.isEmpty
             search(query.lowercased())
@@ -121,6 +131,15 @@ final class CatBreedsViewModel {
         }
 
         fetchBreeds(page: state.pagination.nextPage)
+    }
+
+    private func handleFavoriteTapped(_ breed: Breed) {
+        guard let value = state.favoriteBreedIds[breed.id] else {
+            state.favoriteBreedIds[breed.id] = true
+            return
+        }
+
+        state.favoriteBreedIds[breed.id] = !value
     }
 
     private func search(_ query: String) {

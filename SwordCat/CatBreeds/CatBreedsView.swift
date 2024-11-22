@@ -52,8 +52,11 @@ struct CatBreedsView: View {
                 Text(breed.name)
                     .font(.title2)
 
-                Image(systemName: "star")
+                Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
                     .font(.system(size: 20))
+                    .onTapGesture {
+                        viewModel.send(.favoriteButtonTapped(breed))
+                    }
             }
         }
         .onAppear {
@@ -83,7 +86,7 @@ struct CatBreedsView: View {
     CatBreedsView(
         viewModel: .init(
             initialState: .init(),
-            repository: .live
+            repository: .success
         )
     )
 }
