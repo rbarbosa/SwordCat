@@ -105,6 +105,7 @@ final class CatBreedsViewModel {
                     state.pagination.thresholdItemId = nil
                 }
             } catch {
+                state.isLoading = false
                 print("Got error fetching breeds: \(error)")
             }
         }
@@ -145,7 +146,17 @@ final class CatBreedsViewModel {
     }
 
     private func searchBreed(_ withQuery: String) {
-        // make API request
+        state.isLoading = true
+        Task {
+            do {
+                let response = try await repository.searchBreeds(withQuery)
+                state.filteredBreeds = response.breeds
+                state.isLoading = false
+            } catch {
+                state.isLoading = false
+                print("Error searching breeds: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

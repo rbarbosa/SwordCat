@@ -11,4 +11,6 @@ struct CatBreedsRepository {
     var fetchImages: () async throws -> ImagesRepositoryResponse
 
     var fetchBreeds: (_ page: Int) async throws -> BreedsRepositoryResponse
+
+    var searchBreeds: (_ query: String) async throws -> BreedsRepositoryResponse
 }

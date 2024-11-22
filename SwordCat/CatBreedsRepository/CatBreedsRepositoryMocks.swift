@@ -18,6 +18,9 @@ extension CatBreedsRepository {
             },
             fetchBreeds: { _ in
                 .init(breeds: [.mock])
+            },
+            searchBreeds: { _ in
+                .init(breeds: [.mock])
             }
         )
     }
