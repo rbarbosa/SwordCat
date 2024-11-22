@@ -27,21 +27,35 @@ final class Networking {
         "Content-Type": "application/json",
     ]
 
-    func fetchURL(forQuery query: QueryType) async throws -> Data {
+    func fetch(query: QueryType) async throws -> Data {
         guard let url = makeURL(fromQuery: query) else {
             throw NetworkingError.invalidURL
         }
 
-        return try await fetchURL(url)
+        let urlRequest = URLRequest(url: url)
+
+        return try await performURLRequest(urlRequest)
+
     }
 
-    func fetchURL(_ url: URL) async throws -> Data {
-        var urlRequest = URLRequest(url: url)
+    func perform(mutationQuery: MutationQueryType) async throws -> Data {
+        guard let url = makeURL(fromMutationQuery: mutationQuery) else {
+            throw NetworkingError.invalidURL
+        }
 
-        defaultHeaders.forEach { urlRequest.setValue($0.value, forHTTPHeaderField: $0.key) }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try mutationQuery.data()
+
+        return try await performURLRequest(urlRequest)
+    }
+
+    private func performURLRequest(_ urlRequest: URLRequest) async throws -> Data {
+        var request = urlRequest
+        defaultHeaders.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let (data, response) = try await URLSession.shared.data(for: request)
 
             guard
                 let httpResponse = response as? HTTPURLResponse,
@@ -65,40 +79,13 @@ final class Networking {
 
         return urlComponents.url
     }
-}
 
-// MARK: - Query type
+    private func makeURL(fromMutationQuery queryType: MutationQueryType) -> URL? {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = APIURLComponents.scheme
+        urlComponents.host = APIURLComponents.host
+        urlComponents.path = APIURLComponents.path + queryType.path
 
-enum QueryType {
-    case images(page: Int)
-    case breeds(page: Int)
-    case searchBreed(String)
-
-    var path: String {
-        switch self {
-        case .images: "images/search"
-        case .breeds: "breeds"
-        case .searchBreed: "breeds/search"
-        }
-    }
-
-    var queryItems: [URLQueryItem] {
-        var items: [URLQueryItem] = []
-
-        switch self {
-        case .images(page: let page):
-            items.append(.init(name: "page", value: String(page)))
-            items.append(.init(name: "limit", value: "10"))
-            items.append(.init(name: "has_breeds", value: "1"))
-
-        case .breeds(page: let page):
-            items.append(.init(name: "page", value: String(page)))
-            items.append(.init(name: "limit", value: "10"))
-
-        case .searchBreed(let query):
-            items.append(.init(name: "q", value: query))
-        }
-
-        return items
+        return urlComponents.url
     }
 }

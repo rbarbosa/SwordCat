@@ -15,15 +15,15 @@ extension CatBreedsRepository {
 
         return .init(
             fetchImages: {
-                let data = try await networking.fetchURL(forQuery: .images(page: 0))
+                let data = try await networking.fetch(query: .images(page: 0))
                 return try makeImagesRepositoryResponse(from: data)
             },
             fetchBreeds: { page in
-                let data = try await networking.fetchURL(forQuery: .breeds(page: page))
+                let data = try await networking.fetch(query: .breeds(page: page))
                 return try makeBreedsRepositoryResponse(from: data)
             },
             searchBreeds: { query in
-                let data = try await networking.fetchURL(forQuery: .searchBreed(query))
+                let data = try await networking.fetch(query: .searchBreed(query))
                 return try makeBreedsRepositoryResponse(from: data)
             }
         )
