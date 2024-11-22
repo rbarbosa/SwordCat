@@ -24,6 +24,9 @@ extension CatBreedsRepository {
             },
             markAsFavorite: { _, _ in
                 .init(id: 123)
+            },
+            markAsUnfavorite: { _ in
+                .init(success: true)
             }
         )
     }

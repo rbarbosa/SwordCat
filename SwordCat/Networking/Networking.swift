@@ -44,7 +44,7 @@ final class Networking {
         }
 
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
+        urlRequest.httpMethod = mutationQuery.httpMethod
         urlRequest.httpBody = try mutationQuery.data()
 
         return try await performURLRequest(urlRequest)

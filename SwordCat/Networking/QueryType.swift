@@ -45,20 +45,35 @@ enum QueryType {
 
 enum MutationQueryType {
     case markFavorite(MarkFavoriteInput)
+    case unfavorite(favoriteId: Int)
 
     var path: String {
         switch self {
-        case .markFavorite: "favourites"
+        case .markFavorite: 
+            "favourites"
+
+        case .unfavorite(let favoriteId):
+            "favourites/\(favoriteId)"
+
+        
         }
     }
 
-    func data() throws -> Data {
+    var httpMethod: String {
+        switch self {
+        case .markFavorite: "POST"
+        case .unfavorite: "DELETE"
+        }
+    }
+
+    func data() throws -> Data? {
         switch self {
         case .markFavorite(let input):
             try JSONEncoder().encode(input)
+        case .unfavorite:
+            nil
         }
     }
-
 }
 
 

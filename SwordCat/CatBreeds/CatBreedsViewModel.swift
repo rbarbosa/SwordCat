@@ -156,7 +156,12 @@ final class CatBreedsViewModel {
     }
 
     private func markBreedAsUnfavorite(_ breed: Breed, id: Int) {
-        state.favoriteBreedIds[breed.id] = nil
+        Task {
+            let response = await repository.markAsUnfavorite(id)
+            if response.success {
+                state.favoriteBreedIds[breed.id] = nil
+            }
+        }
     }
 
     private func search(_ query: String) {

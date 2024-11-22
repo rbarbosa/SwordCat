@@ -30,6 +30,14 @@ extension CatBreedsRepository {
                 let input = MarkFavoriteInput(userId: userId, imageId: imageId)
                 let data = try await networking.perform(mutationQuery: .markFavorite(input))
                 return try makeMarkAsFavoriteRepositoryResponse(from: data)
+            },
+            markAsUnfavorite: { favoriteId in
+                do {
+                   _ = try await networking.perform(mutationQuery: .unfavorite(favoriteId: favoriteId))
+                    return .init(success: true)
+                } catch {
+                    return .init(success: false)
+                }
             }
         )
     }
