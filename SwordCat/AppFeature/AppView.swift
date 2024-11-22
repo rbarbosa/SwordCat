@@ -12,7 +12,7 @@ struct AppView: View {
         TabView {
             CatBreedsView(
                 viewModel: .init(
-                    initialState: .init(breeds: []),
+                    initialState: .init(),
                     repository: .live
                 )
             )

@@ -32,6 +32,11 @@ struct CatBreedsView: View {
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .onChange(of: searchText) { oldValue, newValue in
+            if oldValue != newValue {
+                viewModel.send(.search(newValue))
+            }
+        }
         .onAppear {
             viewModel.send(.onAppear)
         }
@@ -77,7 +82,7 @@ struct CatBreedsView: View {
 #Preview {
     CatBreedsView(
         viewModel: .init(
-            initialState: .init(breeds: []),
+            initialState: .init(),
             repository: .live
         )
     )

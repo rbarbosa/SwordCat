@@ -27,16 +27,15 @@ final class CatBreedsViewModel {
 
     struct State {
         var breeds: [Breed] {
-            didSet {
-                print("breeds updated - count: \(breeds.count)")
-                if pagination.hasMoreItems {
-                    updateThresholdItemId()
-                }
-            }
+            isSearching ? filteredBreeds : fetchedBreeds
         }
 
         var isLoading: Bool = false
+        var isSearching: Bool = false
         var pagination: Pagination = .init()
+
+        fileprivate var fetchedBreeds: [Breed] = []
+        fileprivate var filteredBreeds: [Breed] = []
 
         mutating func updateThresholdItemId() {
             let index = breeds.count - 3
@@ -49,6 +48,7 @@ final class CatBreedsViewModel {
     // MARK: - Action
 
     enum Action {
+        case search(String)
         case onAppear
         case onCardBreedAppear(Breed)
     }
@@ -74,6 +74,11 @@ final class CatBreedsViewModel {
 
     func send(_ action: Action) {
         switch action {
+        case .search(let query):
+            state.isSearching = !query.isEmpty
+            search(query.lowercased())
+
+
         case .onAppear:
             fetchBreeds(page: 0)
 
@@ -90,11 +95,12 @@ final class CatBreedsViewModel {
                 let response = try await repository.fetchBreeds(page)
 
                 state.isLoading = false
-                state.breeds.append(contentsOf: response.breeds)
+                state.fetchedBreeds.append(contentsOf: response.breeds)
 
                 state.pagination.hasMoreItems = response.breeds.count > 0
                 if state.pagination.hasMoreItems {
                     state.pagination.nextPage += 1
+                    state.updateThresholdItemId()
                 } else {
                     state.pagination.thresholdItemId = nil
                 }
@@ -114,6 +120,32 @@ final class CatBreedsViewModel {
         }
 
         fetchBreeds(page: state.pagination.nextPage)
+    }
+
+    private func search(_ query: String) {
+        // Search first within the items already fetched
+        guard !state.fetchedBreeds.isEmpty else {
+            searchBreed(query)
+            return
+        }
+
+        let predicate = #Predicate<Breed> {
+            $0.name.localizedStandardContains(query)
+        }
+
+        let filteredBreeds = try? state.fetchedBreeds.filter(predicate)
+
+        if let filteredBreeds, !filteredBreeds.isEmpty {
+            state.filteredBreeds = filteredBreeds
+            return
+        }
+
+        // Not found breed within fetched breeds, search with API
+        searchBreed(query)
+    }
+
+    private func searchBreed(_ withQuery: String) {
+        // make API request
     }
 }
 
