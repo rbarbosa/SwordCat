@@ -34,6 +34,7 @@ final class CatBreedsViewModel {
         var isSearching: Bool = false
         var favoriteBreedIds: [String: Bool] = [:]
         var pagination: Pagination = .init()
+        let user: User = .init()
 
         fileprivate var fetchedBreeds: [Breed] = []
         fileprivate var filteredBreeds: [Breed] = []
@@ -134,6 +135,17 @@ final class CatBreedsViewModel {
     }
 
     private func handleFavoriteTapped(_ breed: Breed) {
+        Task {
+            do {
+                _ = try await repository.markAsFavorite(state.user.id, breed.referenceImageId)
+                markBreedAsFavorite(breed)
+            } catch {
+                print("Error marking breed as favorite: \(error)")
+            }
+        }
+    }
+
+    private func markBreedAsFavorite(_ breed: Breed) {
         guard let value = state.favoriteBreedIds[breed.id] else {
             state.favoriteBreedIds[breed.id] = true
             return
