@@ -20,13 +20,22 @@ struct AppView: View {
                 Label("Cats", systemImage: "cat.fill")
             }
 
-            Text("Favorites")
-                .tabItem {
-                    Label("Favorites", systemImage: "star.fill")
-                }
+            CatBreedFavoritesView(
+                viewModel: .init(
+                    initialState: .init(
+                        favorites: []
+                    ),
+                    repository: .live
+                )
+            )
+            .tabItem {
+                Label("Favorites", systemImage: "star.fill")
+            }
         }
     }
 }
+
+// MARK: - Previews
 
 #Preview {
     AppView()
