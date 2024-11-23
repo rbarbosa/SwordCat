@@ -44,6 +44,11 @@ extension CatBreedsRepository {
                 let response = try makeFavoritesRepositoryResponse(from: data)
                 let favorites = response.favorites.filter { $0.subId == userId }
                 return .init(favorites: favorites)
+            },
+            fetchImage: { imageId in
+                let data = try await networking.fetch(query: .image(imageId: imageId))
+                let response = try makeImageRepositoryResponse(from: data)
+                return .init(breed: response.breed)
             }
         )
     }

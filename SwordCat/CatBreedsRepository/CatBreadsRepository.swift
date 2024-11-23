@@ -19,4 +19,6 @@ struct CatBreedsRepository {
     var markAsUnfavorite: (_ id: Int) async -> MarkAsUnfavoriteRepositoryResponse
 
     var fetchFavorites: (_ userId: String) async throws -> FavoritesRepositoryResponse
+
+    var fetchImage: (_ imageId: String) async throws -> ImageRepositoryResponse
 }

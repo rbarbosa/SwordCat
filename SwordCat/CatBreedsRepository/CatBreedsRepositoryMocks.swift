@@ -30,6 +30,9 @@ extension CatBreedsRepository {
             },
             fetchFavorites: { _ in
                 .init(favorites: [.init(id: 1, imageId: "image_id", subId: "sub_id")])
+            },
+            fetchImage: { _ in
+                .init(breed: .mock)
             }
         )
     }

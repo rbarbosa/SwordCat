@@ -23,7 +23,7 @@ struct AppView: View {
             CatBreedFavoritesView(
                 viewModel: .init(
                     initialState: .init(
-                        favorites: []
+                        favoriteFetchedBreeds: []
                     ),
                     repository: .live
                 )

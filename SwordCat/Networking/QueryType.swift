@@ -10,6 +10,7 @@ import Foundation
 // MARK: - Query type
 
 enum QueryType {
+    case image(imageId: String)
     case images(page: Int)
     case breeds(page: Int)
     case searchBreed(String)
@@ -17,6 +18,7 @@ enum QueryType {
 
     var path: String {
         switch self {
+        case .image(let imageId): "images/\(imageId)"
         case .images: "images/search"
         case .breeds: "breeds"
         case .searchBreed: "breeds/search"
@@ -28,6 +30,9 @@ enum QueryType {
         var items: [URLQueryItem] = []
 
         switch self {
+        case .image:
+            break
+
         case .images(page: let page):
             items.append(.init(name: "page", value: String(page)))
             items.append(.init(name: "limit", value: "10"))

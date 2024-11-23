@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Breed {
+struct Breed: Identifiable {
     let description: String
     let id: String
     let lifeSpan: String
