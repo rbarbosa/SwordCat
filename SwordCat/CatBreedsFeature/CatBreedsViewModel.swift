@@ -37,6 +37,7 @@ final class CatBreedsViewModel {
         var pagination: Pagination = .init()
         let user: User = .init()
 
+        fileprivate var didFirstAppear: Bool = false
         fileprivate var fetchedBreeds: [Breed] = []
         fileprivate var filteredBreeds: [Breed] = []
 
@@ -93,6 +94,10 @@ final class CatBreedsViewModel {
 
 
         case .onAppear:
+            if state.didFirstAppear {
+                return
+            }
+            state.didFirstAppear = true
             fetchBreeds(page: 0)
 
         case .onCardBreedAppear(let breed):
@@ -119,6 +124,11 @@ final class CatBreedsViewModel {
                 }
             } catch {
                 state.isLoading = false
+                // If the fetch failed for first page, and while we don't have a button to retry, let's enable
+                // fetch for next page
+                if state.pagination.nextPage == 0 {
+                    state.didFirstAppear = false
+                }
                 print("Got error fetching breeds: \(error)")
             }
         }
