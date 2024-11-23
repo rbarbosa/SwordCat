@@ -73,7 +73,7 @@ struct CatBreedFavoritesView: View {
 #Preview {
     CatBreedFavoritesView(
         viewModel: .init(
-            initialState: .init(favoriteFetchedBreeds: []),
+            initialState: .init(favoritesFetched: []),
             repository: .live
         )
     )

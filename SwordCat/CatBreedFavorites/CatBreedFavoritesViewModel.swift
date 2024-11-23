@@ -29,7 +29,7 @@ final class CatBreedFavoritesViewModel {
     struct State {
         var isLoading: Bool = false
         var favorites: [Breed] = []
-        var favoriteFetchedBreeds: [FavoriteBreed]
+        var favoritesFetched: [FavoriteBreed] // Rename to just favorites
         let user: User = .init()
     }
 
@@ -64,18 +64,31 @@ final class CatBreedFavoritesViewModel {
     func fetchFavorites() {
         state.isLoading = true
         Task {
+            defer {
+                state.isLoading = false
+            }
+
             do {
                 let response = try await repository.fetchFavorites(state.user.id)
-                state.favoriteFetchedBreeds = response.favorites
-                print("Fetched favorites: \(response.favorites)")
-                for favorite in state.favoriteFetchedBreeds {
-                    print("Fetching breed for favorite: \(favorite)")
-                    let response = try await repository.fetchImage(favorite.imageId)
+
+                var newFavorites: [FavoriteBreed] = []
+                if state.favoritesFetched.isEmpty {
+                    newFavorites = response.favorites
+                } else {
+                    newFavorites = response.favorites.filter { new in
+                        !state.favoritesFetched.contains(where: { $0.id == new.id })
+                    }
                 }
+
+                for favorite in newFavorites {
+                    let response = try await repository.fetchImage(favorite.imageId)
+                    state.favorites.append(response.breed)
+                }
+
+                state.favoritesFetched.append(contentsOf: newFavorites)
             } catch {
                 print("Error fetching favorites: \(error.localizedDescription)")
             }
         }
-
     }
 }
