@@ -27,6 +27,9 @@ extension CatBreedsRepository {
             },
             markAsUnfavorite: { _ in
                 .init(success: true)
+            },
+            fetchFavorites: { _ in
+                .init(favorites: [.init(id: 1, imageId: "image_id", subId: "sub_id")])
             }
         )
     }

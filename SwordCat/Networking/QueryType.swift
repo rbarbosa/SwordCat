@@ -13,12 +13,14 @@ enum QueryType {
     case images(page: Int)
     case breeds(page: Int)
     case searchBreed(String)
+    case favorites
 
     var path: String {
         switch self {
         case .images: "images/search"
         case .breeds: "breeds"
         case .searchBreed: "breeds/search"
+        case .favorites: "favourites"
         }
     }
 
@@ -37,6 +39,9 @@ enum QueryType {
 
         case .searchBreed(let query):
             items.append(.init(name: "q", value: query))
+
+        case .favorites:
+            break
         }
 
         return items

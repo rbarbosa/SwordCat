@@ -38,6 +38,12 @@ extension CatBreedsRepository {
                 } catch {
                     return .init(success: false)
                 }
+            },
+            fetchFavorites: { userId in
+                let data = try await networking.fetch(query: .favorites)
+                let response = try makeFavoritesRepositoryResponse(from: data)
+                let favorites = response.favorites.filter { $0.subId == userId }
+                return .init(favorites: favorites)
             }
         )
     }
