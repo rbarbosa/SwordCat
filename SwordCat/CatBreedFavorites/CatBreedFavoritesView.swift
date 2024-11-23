@@ -39,12 +39,12 @@ struct CatBreedFavoritesView: View {
                 Text(breed.name)
                     .font(.title2)
 
-                // TODO: - Add a progress view for the favoriting process
-//                Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
-//                    .font(.system(size: 20))
-//                    .onTapGesture {
-//                        viewModel.send(.favoriteButtonTapped(breed))
-//                    }
+                HStack {
+                    Text("Lifespan")
+
+                    Text(breed.lifeSpan)
+                }
+                .font(.subheadline)
             }
         }
         .onAppear {
