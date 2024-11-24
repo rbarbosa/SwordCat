@@ -10,6 +10,7 @@
 		33F932902CF35E03001A40EF /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 33F9328F2CF35E03001A40EF /* CasePaths */; };
 		33F932932CF35E85001A40EF /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932922CF35E85001A40EF /* SwiftNavigation */; };
 		33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932942CF35E85001A40EF /* SwiftUINavigation */; };
+		33F933932CF3795A001A40EF /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 33F933922CF3795A001A40EF /* IdentifiedCollections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33F932932CF35E85001A40EF /* SwiftNavigation in Frameworks */,
+				33F933932CF3795A001A40EF /* IdentifiedCollections in Frameworks */,
 				33F932902CF35E03001A40EF /* CasePaths in Frameworks */,
 				33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */,
 			);
@@ -124,6 +126,7 @@
 				33F9328F2CF35E03001A40EF /* CasePaths */,
 				33F932922CF35E85001A40EF /* SwiftNavigation */,
 				33F932942CF35E85001A40EF /* SwiftUINavigation */,
+				33F933922CF3795A001A40EF /* IdentifiedCollections */,
 			);
 			productName = SwordCat;
 			productReference = 33259AB52CEF3B650083F029 /* SwordCat.app */;
@@ -210,6 +213,7 @@
 			packageReferences = (
 				33F9328E2CF35E03001A40EF /* XCRemoteSwiftPackageReference "swift-case-paths" */,
 				33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */,
+				33F933912CF3795A001A40EF /* XCRemoteSwiftPackageReference "swift-identified-collections" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 33259AB62CEF3B650083F029 /* Products */;
@@ -592,6 +596,14 @@
 				minimumVersion = 2.2.2;
 			};
 		};
+		33F933912CF3795A001A40EF /* XCRemoteSwiftPackageReference "swift-identified-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-identified-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -609,6 +621,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */;
 			productName = SwiftUINavigation;
+		};
+		33F933922CF3795A001A40EF /* IdentifiedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33F933912CF3795A001A40EF /* XCRemoteSwiftPackageReference "swift-identified-collections" */;
+			productName = IdentifiedCollections;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
