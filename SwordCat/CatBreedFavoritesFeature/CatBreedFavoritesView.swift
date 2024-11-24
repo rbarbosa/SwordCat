@@ -17,12 +17,18 @@ struct CatBreedFavoritesView: View {
                 LazyVStack(alignment: .leading) {
                     ForEach(viewModel.state.favorites) { favorite in
                         breedCard(favorite)
+                            .onTapGesture {
+                                viewModel.send(.breedCardTapped(favorite))
+                            }
                     }
                 }
                 .padding(.horizontal)
             }
             .navigationTitle("Favorites")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: viewModel.destinationBinding(for: \.detail)) { detailState in
+                CatBreedDetailView(viewModel: .init(initialState: detailState))
+            }
             .onAppear {
                 viewModel.send(.onAppear)
             }
@@ -46,9 +52,6 @@ struct CatBreedFavoritesView: View {
                 }
                 .font(.subheadline)
             }
-        }
-        .onAppear {
-//            viewModel.send(.onCardBreedAppear(breed))
         }
     }
 
