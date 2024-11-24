@@ -17,9 +17,10 @@ final class CatBreedDetailViewModel {
 
     // MARK: - State
 
-    struct State {
+    struct State: Identifiable {
         let breed: Breed
         var isFavorite: Bool
+        var id: String { breed.id }
     }
 
     // MARK: - Action

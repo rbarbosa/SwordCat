@@ -19,6 +19,9 @@ struct CatBreedsView: View {
                 LazyVStack(alignment: .leading) {
                     ForEach(viewModel.breeds, id: \.id) { breed in
                         breedCard(breed)
+                            .onTapGesture {
+                                viewModel.send(.breedCardTapped(breed))
+                            }
                     }
                     // TODO: - Add last card with loading/error states
                 }
@@ -32,6 +35,9 @@ struct CatBreedsView: View {
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .sheet(item: viewModel.destinationBinding(for: \.detail)) { detailState in
+            CatBreedDetailView(viewModel: .init(initialState: detailState))
+        }
         .onChange(of: searchText) { oldValue, newValue in
             if oldValue != newValue {
                 viewModel.send(.search(newValue))

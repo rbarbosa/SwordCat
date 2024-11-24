@@ -5,7 +5,9 @@
 //  Created by Rui Barbosa on 21/11/2024.
 //
 
+import CasePaths
 import Foundation
+import struct SwiftUI.Binding
 
 struct Pagination {
     var hasMoreItems: Bool = true
@@ -20,7 +22,9 @@ final class CatBreedsViewModel {
 
     // MARK: - Destination
 
+    @CasePathable
     enum Destination {
+        case detail(CatBreedDetailViewModel.State)
     }
 
     // MARK: - State
@@ -29,10 +33,10 @@ final class CatBreedsViewModel {
         var breeds: [Breed] {
             isSearching ? filteredBreeds : fetchedBreeds
         }
+        var destination: Destination?
 
         var isLoading: Bool = false
         var isSearching: Bool = false
-        var _favoriteBreedIds: [String: Bool] = [:]
         var favoriteBreedIds: [String: Int] = [:]
         var pagination: Pagination = .init()
         let user: User = .init()
@@ -57,6 +61,7 @@ final class CatBreedsViewModel {
     // MARK: - Action
 
     enum Action {
+        case breedCardTapped(Breed)
         case favoriteButtonTapped(Breed)
         case search(String)
         case onAppear
@@ -84,6 +89,11 @@ final class CatBreedsViewModel {
 
     func send(_ action: Action) {
         switch action {
+        case .breedCardTapped(let breed):
+            let isFavorite = state.isFavorite(breed)
+            let detailState = CatBreedDetailViewModel.State(breed: breed, isFavorite: isFavorite)
+            state.destination = .detail(detailState)
+
         case .favoriteButtonTapped(let breed):
             print("Favorite button tapped for \(breed.name)")
             handleFavoriteTapped(breed)
@@ -208,6 +218,25 @@ final class CatBreedsViewModel {
                 print("Error searching breeds: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension CatBreedsViewModel {
+    func destinationBinding<Case>(
+        for casePath: CaseKeyPath<Destination, Case>
+    ) -> Binding<Case?> {
+        Binding(
+            get: { self.state.destination?[case: casePath] },
+            set: { [weak self] newValue in
+                guard let self else { return }
+                if let newValue = newValue {
+                    let destination = AnyCasePath(casePath).embed(newValue)
+                    state.destination = destination
+                } else {
+                    state.destination = nil
+                }
+            }
+        )
     }
 }
 
