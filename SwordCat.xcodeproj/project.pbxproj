@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		33F932902CF35E03001A40EF /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = 33F9328F2CF35E03001A40EF /* CasePaths */; };
+		33F932932CF35E85001A40EF /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932922CF35E85001A40EF /* SwiftNavigation */; };
+		33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932942CF35E85001A40EF /* SwiftUINavigation */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		33259AC62CEF3B670083F029 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F932932CF35E85001A40EF /* SwiftNavigation in Frameworks */,
+				33F932902CF35E03001A40EF /* CasePaths in Frameworks */,
+				33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +121,9 @@
 			);
 			name = SwordCat;
 			packageProductDependencies = (
+				33F9328F2CF35E03001A40EF /* CasePaths */,
+				33F932922CF35E85001A40EF /* SwiftNavigation */,
+				33F932942CF35E85001A40EF /* SwiftUINavigation */,
 			);
 			productName = SwordCat;
 			productReference = 33259AB52CEF3B650083F029 /* SwordCat.app */;
@@ -195,6 +207,10 @@
 			);
 			mainGroup = 33259AAC2CEF3B650083F029;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				33F9328E2CF35E03001A40EF /* XCRemoteSwiftPackageReference "swift-case-paths" */,
+				33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 33259AB62CEF3B650083F029 /* Products */;
 			projectDirPath = "";
@@ -558,6 +574,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		33F9328E2CF35E03001A40EF /* XCRemoteSwiftPackageReference "swift-case-paths" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-case-paths.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.6;
+			};
+		};
+		33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-navigation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		33F9328F2CF35E03001A40EF /* CasePaths */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33F9328E2CF35E03001A40EF /* XCRemoteSwiftPackageReference "swift-case-paths" */;
+			productName = CasePaths;
+		};
+		33F932922CF35E85001A40EF /* SwiftNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftNavigation;
+		};
+		33F932942CF35E85001A40EF /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33F932912CF35E85001A40EF /* XCRemoteSwiftPackageReference "swift-navigation" */;
+			productName = SwiftUINavigation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 33259AAD2CEF3B650083F029 /* Project object */;
 }
