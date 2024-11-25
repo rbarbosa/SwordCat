@@ -10,14 +10,6 @@ import Foundation
 import struct SwiftUI.Binding
 import class UIKit.UIImage
 
-// TODO: - Move this to Models
-struct Pagination {
-    var hasMoreItems: Bool = true
-    var limit: Int = 10
-    var nextPage: Int = 0
-    var thresholdItemId: String?
-}
-
 @Observable
 @dynamicMemberLookup
 final class CatBreedsViewModel {
