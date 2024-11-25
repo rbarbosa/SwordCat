@@ -268,7 +268,6 @@ final class CatBreedsViewModel {
                 state.isLoading = false
             } catch {
                 state.isLoading = false
-                print("Error searching breeds: \(error.localizedDescription)")
             }
         }
     }

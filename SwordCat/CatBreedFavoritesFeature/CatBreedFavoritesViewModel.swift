@@ -134,7 +134,6 @@ final class CatBreedFavoritesViewModel {
                 state.favorites = try await favoritesManager.fetchFavoriteBreeds()
             } catch {
                 state.didInitialFetch = false
-                print("Error fetching favorites: \(error.localizedDescription)")
             }
         }
     }

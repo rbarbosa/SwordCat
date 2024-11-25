@@ -113,7 +113,6 @@ actor FavoritesManager {
 
             return true
         } catch {
-            print("Failed to added favorite - \(breed.name) with id: \(breed.referenceImageId)")
             return false
         }
     }
