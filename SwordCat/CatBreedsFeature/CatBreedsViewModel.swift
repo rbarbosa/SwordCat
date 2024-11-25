@@ -282,10 +282,16 @@ final class CatBreedsViewModel {
 
     private func handleBreedDetailDelegateAction(_ action: CatBreedDetailViewModel.Action.Delegate) {
         switch action {
-        case .didDismiss(_, let newFavoriteState):
-            guard let _ = newFavoriteState else { return }
+        case .didDismiss(let breed, let newFavoriteState):
+            guard let newFavoriteState else { return }
 
             updateFavoritesState()
+
+            if newFavoriteState {
+                parentActionHandler(.didFavorite(breed))
+            } else {
+                parentActionHandler(.didUnfavorite(breed))
+            }
         }
     }
 
