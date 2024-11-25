@@ -68,11 +68,10 @@ final class AppViewModel {
             defer { state.isLoading = false }
 
             do {
-               let _ = try await favoritesManager.fetchFavorites()
-                print("Finished fetching favorites")
+                let _ = try await favoritesManager.fetchFavoriteImageIds()
                 state.isLoading = false
             } catch {
-                print("Error fetching favorites: \(error)")
+                print("❌ Error fetching favorites: \(error)")
             }
         }
     }
