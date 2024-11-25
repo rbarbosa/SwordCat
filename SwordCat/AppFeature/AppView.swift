@@ -8,35 +8,47 @@
 import SwiftUI
 
 struct AppView: View {
-    var body: some View {
-        TabView {
-            CatBreedsView(
-                viewModel: .init(
-                    initialState: .init(),
-                    repository: .live
-                )
-            )
-            .tabItem {
-                Label("Cats", systemImage: "cat.fill")
-            }
 
-            CatBreedFavoritesView(
-                viewModel: .init(
-                    initialState: .init(
-                        favoritesFetched: []
-                    ),
-                    repository: .live
-                )
-            )
-            .tabItem {
-                Label("Favorites", systemImage: "star.fill")
+    let viewModel: AppViewModel
+
+    var body: some View {
+        contentView()
+            .task {
+                viewModel.send(.onAppear)
             }
+    }
+
+    // MARK: - Subviews
+
+    @ViewBuilder
+    private func contentView() -> some View {
+        if viewModel.state.isLoading {
+            VStack {
+                Text("Searching for cats...")
+                ProgressView()
+            }
+        } else {
+            tabView()
+        }
+    }
+
+    private func tabView() -> some View {
+        TabView {
+            CatBreedsView(viewModel: viewModel.breedsViewModel)
+                .tabItem {
+                    Label("Cats", systemImage: "cat.fill")
+                }
+
+            CatBreedFavoritesView(viewModel: viewModel.favoritesViewModel)
+                .tabItem {
+                    Label("Favorites", systemImage: "star.fill")
+                }
         }
     }
 }
 
 // MARK: - Previews
 
-#Preview {
-    AppView()
-}
+//#Preview {
+//
+//}

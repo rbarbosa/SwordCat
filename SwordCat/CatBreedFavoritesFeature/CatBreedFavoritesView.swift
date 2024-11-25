@@ -77,7 +77,8 @@ struct CatBreedFavoritesView: View {
     CatBreedFavoritesView(
         viewModel: .init(
             initialState: .init(favoritesFetched: []),
-            repository: .live
+            repository: .live,
+            favoritesManager: .init(repository: .live, user: .init())
         )
     )
 }

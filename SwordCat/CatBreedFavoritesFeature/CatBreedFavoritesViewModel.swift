@@ -46,15 +46,18 @@ final class CatBreedFavoritesViewModel {
 
     private(set) var state: State
     private let repository: CatBreedsRepository
+    private var favoritesManager: FavoritesManager
 
     // MARK: - Initialization
 
     init(
         initialState: State,
-        repository: CatBreedsRepository
+        repository: CatBreedsRepository,
+        favoritesManager: FavoritesManager
     ) {
         self.state = initialState
         self.repository = repository
+        self.favoritesManager = favoritesManager
     }
 
     func send(_ action: Action) {

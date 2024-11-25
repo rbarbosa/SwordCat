@@ -8,9 +8,21 @@
 import SwiftUI
 
 struct SwordCatApp: App {
+    static let favoritesManager: FavoritesManager = .init(
+        repository: .live,
+        user: .init()
+    )
+    let viewModel: AppViewModel = .init(
+        initialState: .init(
+            breeds: .init(),
+            favorites: .init(favoritesFetched: [])
+        ),
+        favoritesManager: favoritesManager
+    )
+
     var body: some Scene {
         WindowGroup {
-            AppView()
+            AppView(viewModel: viewModel)
         }
     }
 }

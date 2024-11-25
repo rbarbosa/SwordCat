@@ -93,7 +93,8 @@ struct CatBreedsView: View {
     CatBreedsView(
         viewModel: .init(
             initialState: .init(),
-            repository: .success
+            repository: .success,
+            favoritesManager: .init(repository: .live, user: .init())
         )
     )
 }
