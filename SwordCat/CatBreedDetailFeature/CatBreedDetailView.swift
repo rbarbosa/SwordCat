@@ -11,6 +11,8 @@ struct CatBreedDetailView: View {
 
     let viewModel: CatBreedDetailViewModel
 
+    @Environment(\.dismiss) var dismiss
+
     @State private var uiImage: UIImage?
 
     var body: some View {
@@ -53,6 +55,15 @@ struct CatBreedDetailView: View {
             }
             .navigationTitle("\(viewModel.state.breed.name) details")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Ok")
+                    }
+                }
+            }
         }
         .task {
             uiImage = await viewModel.state.image()
