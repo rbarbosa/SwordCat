@@ -36,30 +36,6 @@ actor FavoritesManager {
         self.user = user
     }
 
-    func fetchFavorites() async throws -> IdentifiedArrayOf<Breed> {
-        let response = try await repository.fetchFavorites(user.id)
-        var newFavorites: IdentifiedArrayOf<FavoriteImage> = []
-
-        if favoriteBreeds.isEmpty {
-            newFavorites = .init(uniqueElements: response.favoriteImages)
-            favoritesImage = newFavorites
-        } else {
-            let filteredFavorites = response.favoriteImages.filter { newFavoriteImage in
-                !favoritesImage.contains(where: { $0.imageId == newFavoriteImage.imageId })
-            }
-            favoritesImage.append(contentsOf: filteredFavorites)
-        }
-
-        // Get images and breeds associated
-        for favorite in newFavorites {
-            let response = try await repository.fetchBreedImage(favorite.imageId)
-            favoriteBreeds.append(response.breed)
-            favoriteBreedIds[response.breed.id] = favorite.id
-        }
-
-        return favoriteBreeds
-    }
-
     func fetchFavoriteImageIds() async throws -> IdentifiedArrayOf<FavoriteImage> {
         let response = try await repository.fetchFavorites(user.id)
         var newFavorites: IdentifiedArrayOf<FavoriteImage> = []
