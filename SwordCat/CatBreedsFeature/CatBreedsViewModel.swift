@@ -84,10 +84,6 @@ final class CatBreedsViewModel {
         }
     }
 
-    private enum Constants {
-        static let fetchLimit: Int = 10
-    }
-
     // MARK: - Properties
 
     private(set) var state: State
