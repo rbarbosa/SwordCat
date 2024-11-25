@@ -46,6 +46,7 @@ final class CatBreedsViewModel {
         fileprivate var fetchedBreeds: [Breed] = []
         fileprivate var filteredBreeds: [Breed] = []
         fileprivate var updatingFavoriteBreedIds: Set<String> = []
+        fileprivate var errorFavoriteBreedIds: Set<String> = []
 
         mutating func updateThresholdItemId() {
             let index = breeds.count - 3
@@ -60,6 +61,10 @@ final class CatBreedsViewModel {
 
         func isUpdatingFavoriteBreed(_ breed: Breed) -> Bool {
             updatingFavoriteBreedIds.contains(breed.id)
+        }
+
+        func hasErrorFavoriteBreed(_ breed: Breed) -> Bool {
+            errorFavoriteBreedIds.contains(breed.id)
         }
     }
 
@@ -177,6 +182,7 @@ final class CatBreedsViewModel {
 
     private func handleFavoriteTapped(_ breed: Breed) {
         state.updatingFavoriteBreedIds.insert(breed.id)
+        state.errorFavoriteBreedIds.remove(breed.id)
 
         if state.favoriteBreedIds.contains(breed.referenceImageId) {
             markBreedAsUnfavorite(breed)
@@ -192,6 +198,8 @@ final class CatBreedsViewModel {
             if success {
                 state.favoriteBreedIds.insert(breed.referenceImageId)
                 parentActionHandler(.didFavorite(breed))
+            } else {
+                state.errorFavoriteBreedIds.insert(breed.id)
             }
         }
     }
@@ -203,6 +211,8 @@ final class CatBreedsViewModel {
             if success {
                 state.favoriteBreedIds.remove(breed.referenceImageId)
                 parentActionHandler(.didUnfavorite(breed))
+            } else {
+                state.errorFavoriteBreedIds.insert(breed.id)
             }
         }
     }

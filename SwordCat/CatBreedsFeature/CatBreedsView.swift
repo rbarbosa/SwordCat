@@ -61,11 +61,18 @@ struct CatBreedsView: View {
                 if viewModel.state.isUpdatingFavoriteBreed(breed) {
                     ProgressView()
                 } else {
-                    Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
-                        .font(.system(size: 20))
-                        .onTapGesture {
-                            viewModel.send(.favoriteButtonTapped(breed))
+                    HStack(spacing: 10) {
+                        Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
+                            .font(.system(size: 20))
+                            .onTapGesture {
+                                viewModel.send(.favoriteButtonTapped(breed))
+                            }
+
+                        if viewModel.state.hasErrorFavoriteBreed(breed) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundStyle(.red)
                         }
+                    }
                 }
             }
         }
