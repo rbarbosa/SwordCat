@@ -24,7 +24,9 @@ struct CatBreedDetailView: View {
                     imageView()
 
                     GroupBox("Origin") {
-
+                        Text(viewModel.state.breed.origin)
+                            .padding(.top, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
                     GroupBox("Temperament") {

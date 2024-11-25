@@ -28,6 +28,7 @@ private struct BreedResponse: Decodable {
     let id: String
     let lifeSpan: String
     let name: String
+    let origin: String
     let referenceImageId: String
     let temperament: String
 
@@ -36,6 +37,7 @@ private struct BreedResponse: Decodable {
         case id
         case lifeSpan = "life_span"
         case name
+        case origin
         case referenceImageId = "reference_image_id"
         case temperament
     }
@@ -57,6 +59,7 @@ func makeImagesRepositoryResponse(from data: Data) throws -> ImagesRepositoryRes
                 id: breedsResponse.id,
                 lifeSpan: breedsResponse.lifeSpan,
                 name: breedsResponse.name,
+                origin: breedsResponse.origin,
                 referenceImageId: breedsResponse.referenceImageId,
                 temperament: breedsResponse.temperament,
                 url: imageUrl
