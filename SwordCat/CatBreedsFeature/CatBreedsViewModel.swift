@@ -138,8 +138,10 @@ final class CatBreedsViewModel {
 
         case .onAppear:
             if state.didFirstAppear {
+                updateFavoritesState()
                 return
             }
+            
             state.didFirstAppear = true
             fetchBreeds(page: 0)
 
@@ -266,15 +268,19 @@ final class CatBreedsViewModel {
         }
     }
 
+    private func updateFavoritesState() {
+        Task {
+            let favoriteImageIds = await favoritesManager.favoriteImageIds
+            state.favoriteBreedIds = .init(favoriteImageIds.keys)
+        }
+    }
+
     private func handleBreedDetailDelegateAction(_ action: CatBreedDetailViewModel.Action.Delegate) {
         switch action {
         case .didDismiss(_, let newFavoriteState):
             guard let _ = newFavoriteState else { return }
 
-            Task {
-                let favoriteImageIds = await favoritesManager.favoriteImageIds
-                state.favoriteBreedIds = .init(favoriteImageIds.keys)
-            }
+            updateFavoritesState()
         }
     }
 }
