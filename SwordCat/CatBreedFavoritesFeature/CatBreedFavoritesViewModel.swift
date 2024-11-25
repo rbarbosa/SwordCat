@@ -43,8 +43,8 @@ final class CatBreedFavoritesViewModel {
         var isLoading: Bool = false
         var favorites: IdentifiedArrayOf<Breed> = []
         let user: User = .init()
-        var imageStates: [String: ImageState] = [:]
 
+        fileprivate var imageStates: [String: ImageState] = [:]
         fileprivate var didInitialFetch: Bool = false
 
         func imageState(for breed: Breed) -> ImageState {
@@ -154,7 +154,6 @@ final class CatBreedFavoritesViewModel {
     }
 
     private func handleBreedCardAppeared(_ breed: Breed) {
-        // handle first time -> load
         if let imageState = state.imageStates[breed.id] {
             switch imageState {
             case .loaded: return
