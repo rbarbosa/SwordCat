@@ -8,12 +8,6 @@
 import Foundation
 import IdentifiedCollections
 
-struct FavoriteImage: Identifiable {
-    var id: Int
-    var imageId: String
-}
-
-// FavoritesRepository
 actor FavoritesManager {
     // This shouldn't be necessary
     var favoritesImage: IdentifiedArrayOf<FavoriteImage> = []
