@@ -12,6 +12,7 @@ struct Breed: Identifiable {
     let id: String
     let lifeSpan: String
     let name: String
+    let origin: String
     let referenceImageId: String
     let temperament: String
     let url: URL
@@ -26,6 +27,7 @@ extension Breed {
             id: "abys",
             lifeSpan: "14 - 15",
             name: "Abyssinian",
+            origin: "Egypt",
             referenceImageId: "0XYvRd7oD",
             temperament: "Active, Energetic, Independent, Intelligent, Gentle",
             url: URL(string: "https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg")!
