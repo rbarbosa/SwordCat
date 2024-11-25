@@ -104,7 +104,7 @@ struct CatBreedFavoritesView: View {
 #Preview {
     CatBreedFavoritesView(
         viewModel: .init(
-            initialState: .init(favoritesFetched: []),
+            initialState: .init(),
             repository: .live,
             favoritesManager: .init(repository: .live, user: .init())
         )

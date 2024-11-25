@@ -21,6 +21,7 @@ final class AppViewModel {
     // MARK: - Action
 
     enum Action {
+        case breedsViewModel(CatBreedsViewModel.Action.Delegate)
         case onAppear
     }
 
@@ -44,17 +45,23 @@ final class AppViewModel {
         breedsViewModel = .init(
             initialState: initialState.breeds,
             repository: .live,
-            favoritesManager: favoritesManager
+            favoritesManager: favoritesManager,
+            parentActionHandler: { _ in }
         )
         favoritesViewModel = .init(
             initialState: initialState.favorites,
             repository: .live,
             favoritesManager: favoritesManager
         )
+
+        setUpChildViewModels()
     }
 
     func send(_ action: Action) {
         switch action {
+        case .breedsViewModel(let delegateAction):
+            handleBreedsViewModelAction(delegateAction)
+
         case .onAppear:
             state.isLoading = true
             getFavorites()
@@ -62,6 +69,17 @@ final class AppViewModel {
     }
 
     // MARK: - Private methods
+
+    private func setUpChildViewModels() {
+        breedsViewModel = .init(
+            initialState: state.breeds,
+            repository: .live,
+            favoritesManager: favoritesManager,
+            parentActionHandler: { [weak self] in
+                self?.send(.breedsViewModel($0))
+            }
+        )
+    }
 
     private func getFavorites() {
         Task {
@@ -73,6 +91,16 @@ final class AppViewModel {
             } catch {
                 print("❌ Error fetching favorites: \(error)")
             }
+        }
+    }
+
+    private func handleBreedsViewModelAction(_ action: CatBreedsViewModel.Action.Delegate) {
+        switch action {
+        case .didFavorite(let breed):
+            favoritesViewModel.send(.addFavorite(breed))
+
+        case .didUnfavorite(let breed):
+            favoritesViewModel.send(.removeFavorite(breed))
         }
     }
 }

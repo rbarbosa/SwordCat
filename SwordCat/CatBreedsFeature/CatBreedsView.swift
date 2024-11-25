@@ -94,7 +94,8 @@ struct CatBreedsView: View {
         viewModel: .init(
             initialState: .init(),
             repository: .success,
-            favoritesManager: .init(repository: .live, user: .init())
+            favoritesManager: .init(repository: .live, user: .init()),
+            parentActionHandler: { _ in }
         )
     )
 }

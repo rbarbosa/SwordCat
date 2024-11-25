@@ -15,7 +15,7 @@ struct SwordCatApp: App {
     let viewModel: AppViewModel = .init(
         initialState: .init(
             breeds: .init(),
-            favorites: .init(favoritesFetched: [])
+            favorites: .init()
         ),
         favoritesManager: favoritesManager
     )

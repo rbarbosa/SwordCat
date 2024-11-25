@@ -43,8 +43,10 @@ final class CatBreedFavoritesViewModel {
     // MARK: - Action
 
     enum Action {
+        case addFavorite(Breed)
         case breedCardTapped(Breed)
         case onAppear
+        case removeFavorite(Breed)
     }
 
     private(set) var state: State
@@ -65,6 +67,9 @@ final class CatBreedFavoritesViewModel {
 
     func send(_ action: Action) {
         switch action {
+        case .addFavorite(let breed):
+            state.favorites.insert(breed, at: 0)
+
         case .breedCardTapped(let breed):
             let detailState = CatBreedDetailViewModel.State(breed: breed, isFavorite: true)
             state.destination = .detail(detailState)
@@ -75,6 +80,9 @@ final class CatBreedFavoritesViewModel {
                 fetchFavoriteBreeds()
                 return
             }
+
+        case .removeFavorite(let breed):
+            state.favorites.remove(id: breed.id)
         }
     }
 

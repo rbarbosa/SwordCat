@@ -66,6 +66,11 @@ final class CatBreedsViewModel {
         case search(String)
         case onAppear
         case onCardBreedAppear(Breed)
+
+        enum Delegate {
+            case didFavorite(Breed)
+            case didUnfavorite(Breed)
+        }
     }
 
     private enum Constants {
@@ -77,17 +82,20 @@ final class CatBreedsViewModel {
     private(set) var state: State
     private let repository: CatBreedsRepository
     private var favoritesManager: FavoritesManager
+    let parentActionHandler: (Action.Delegate) -> Void
 
     // MARK: - Initialization
 
     init(
         initialState: State,
         repository: CatBreedsRepository,
-        favoritesManager: FavoritesManager
+        favoritesManager: FavoritesManager,
+        parentActionHandler: @escaping (Action.Delegate) -> Void
     ) {
         self.state = initialState
         self.repository = repository
         self.favoritesManager = favoritesManager
+        self.parentActionHandler = parentActionHandler
     }
 
     func send(_ action: Action) {
@@ -176,6 +184,7 @@ final class CatBreedsViewModel {
             let success = await favoritesManager.addFavorite(breed)
             if success {
                 state.favoriteBreedIds.insert(breed.referenceImageId)
+                parentActionHandler(.didFavorite(breed))
             }
         }
     }
@@ -185,6 +194,7 @@ final class CatBreedsViewModel {
             let success = await favoritesManager.removeFavorite(breed)
             if success {
                 state.favoriteBreedIds.remove(breed.referenceImageId)
+                parentActionHandler(.didUnfavorite(breed))
             }
         }
     }
