@@ -160,7 +160,7 @@ final class CatBreedsViewModel {
     private func fetchBreeds(page: Int) {
         state.isLoading = true
 
-        Task {
+        Task { @MainActor in
             defer {
                 state.isLoading = false
             }
@@ -212,7 +212,7 @@ final class CatBreedsViewModel {
     }
 
     private func markBreedAsFavorite(_ breed: Breed) {
-        Task {
+        Task { @MainActor in
             let success = await favoritesManager.addFavorite(breed)
             state.updatingFavoriteBreedIds.remove(breed.id)
             if success {
@@ -225,7 +225,7 @@ final class CatBreedsViewModel {
     }
 
     private func markBreedAsUnfavorite(_ breed: Breed) {
-        Task {
+        Task { @MainActor in
             let success = await favoritesManager.removeFavorite(breed)
             state.updatingFavoriteBreedIds.remove(breed.id)
             if success {
@@ -261,7 +261,7 @@ final class CatBreedsViewModel {
 
     private func searchBreed(_ withQuery: String) {
         state.isLoading = true
-        Task {
+        Task { @MainActor in
             do {
                 let response = try await repository.searchBreeds(withQuery)
                 state.filteredBreeds = response.breeds
@@ -274,7 +274,7 @@ final class CatBreedsViewModel {
     }
 
     private func updateFavoritesState() {
-        Task {
+        Task { @MainActor in
             let favoriteImageIds = await favoritesManager.favoriteImageIds
             state.favoriteBreedIds = .init(favoriteImageIds.keys)
         }

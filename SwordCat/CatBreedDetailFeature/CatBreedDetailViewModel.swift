@@ -85,7 +85,7 @@ final class CatBreedDetailViewModel: Identifiable {
     // MARK: - Private methods
 
     private func markBreedAsUnfavorite(_ breed: Breed) {
-        Task {
+        Task { @MainActor in
             defer {
                 state.isUpdating = false
             }
@@ -101,7 +101,7 @@ final class CatBreedDetailViewModel: Identifiable {
     }
 
     private func markBreedAsFavorite(_ breed: Breed) {
-        Task {
+        Task { @MainActor in
             defer {
                 state.isUpdating = false
             }

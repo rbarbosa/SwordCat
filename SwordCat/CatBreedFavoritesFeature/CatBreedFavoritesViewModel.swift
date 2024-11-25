@@ -125,7 +125,7 @@ final class CatBreedFavoritesViewModel {
     private func fetchFavoriteBreeds() {
         state.isLoading = true
 
-        Task {
+        Task { @MainActor in
             defer {
                 state.isLoading = false
             }
