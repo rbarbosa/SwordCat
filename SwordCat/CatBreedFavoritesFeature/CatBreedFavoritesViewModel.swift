@@ -36,6 +36,8 @@ final class CatBreedFavoritesViewModel {
         var favorites: IdentifiedArrayOf<Breed> = []
         var favoritesFetched: [FavoriteBreed] // Rename to just favorites
         let user: User = .init()
+
+        fileprivate var didInitialFetch: Bool = false
     }
 
     // MARK: - Action
@@ -68,13 +70,17 @@ final class CatBreedFavoritesViewModel {
             state.destination = .detail(detailState)
 
         case .onAppear:
-            fetchFavoriteBreeds()
+            if !state.didInitialFetch {
+                state.didInitialFetch = true
+                fetchFavoriteBreeds()
+                return
+            }
         }
     }
 
     // MARK: - Private methods
 
-    func fetchFavoriteBreeds() {
+    private func fetchFavoriteBreeds() {
         state.isLoading = true
 
         Task {
@@ -85,6 +91,7 @@ final class CatBreedFavoritesViewModel {
             do {
                 state.favorites = try await favoritesManager.fetchFavoriteBreeds()
             } catch {
+                state.didInitialFetch = false
                 print("Error fetching favorites: \(error.localizedDescription)")
             }
         }
