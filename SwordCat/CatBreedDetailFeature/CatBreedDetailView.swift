@@ -36,6 +36,12 @@ struct CatBreedDetailView: View {
 
                     favoriteButton()
 
+                    if viewModel.state.hasErrorUpdating, !viewModel.state.isUpdating {
+                        Text("Error updating favorite status")
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
+
                 }
             }
             .navigationTitle("\(viewModel.state.breed.name) details")
@@ -51,6 +57,14 @@ struct CatBreedDetailView: View {
                 .font(.title)
                 .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
+                .opacity(viewModel.state.isUpdating ? 0.1 : 1)
+                .disabled(viewModel.state.isUpdating)
+                .overlay(alignment: .center) {
+                    if viewModel.state.isUpdating {
+                        ProgressView()
+                            .tint(.white)
+                    }
+                }
         }
         .padding(.top, 30)
         .padding(.horizontal, 20)
@@ -74,6 +88,10 @@ struct CatBreedDetailView: View {
             initialState: .init(
                 breed: .mock,
                 isFavorite: true
+            ),
+            favoritesManager: .init(
+                repository: .live,
+                user: .init()
             )
         )
     )

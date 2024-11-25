@@ -25,7 +25,7 @@ final class CatBreedsViewModel {
 
     @CasePathable
     enum Destination {
-        case detail(CatBreedDetailViewModel.State)
+        case detail(CatBreedDetailViewModel)
     }
 
     // MARK: - State
@@ -112,8 +112,14 @@ final class CatBreedsViewModel {
         switch action {
         case .breedCardTapped(let breed):
             let isFavorite = state.isFavorite(breed)
-            let detailState = CatBreedDetailViewModel.State(breed: breed, isFavorite: isFavorite)
-            state.destination = .detail(detailState)
+            let viewModel = CatBreedDetailViewModel(
+                initialState: .init(
+                    breed: breed,
+                    isFavorite: isFavorite
+                ),
+                favoritesManager: favoritesManager
+            )
+            state.destination = .detail(viewModel)
 
         case .favoriteButtonTapped(let breed):
             handleFavoriteTapped(breed)

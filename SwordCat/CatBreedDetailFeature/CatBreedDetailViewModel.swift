@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable
-final class CatBreedDetailViewModel {
+final class CatBreedDetailViewModel: Identifiable {
 
     // MARK: - Destination
 
@@ -20,6 +20,9 @@ final class CatBreedDetailViewModel {
     struct State: Identifiable {
         let breed: Breed
         var isFavorite: Bool
+        var isUpdating: Bool = false
+        var hasErrorUpdating: Bool = false
+
         var id: String { breed.id }
     }
 
@@ -30,17 +33,59 @@ final class CatBreedDetailViewModel {
     }
 
     private(set) var state: State
+    private var favoritesManager: FavoritesManager
 
     // MARK: - Initialization
 
-    init(initialState: State) {
+    init(
+        initialState: State,
+        favoritesManager: FavoritesManager
+    ) {
         self.state = initialState
+        self.favoritesManager = favoritesManager
     }
 
     func send(_ action: Action) {
         switch action {
         case .toggleFavorite:
-            state.isFavorite.toggle()
+            state.isUpdating = true
+            if state.isFavorite {
+                markBreedAsUnfavorite(state.breed)
+            } else {
+                markBreedAsFavorite(state.breed)
+            }
+        }
+    }
+
+    private func markBreedAsUnfavorite(_ breed: Breed) {
+        Task {
+            defer {
+                state.isUpdating = false
+            }
+
+            let success = await favoritesManager.removeFavorite(breed)
+            if success {
+                state.isFavorite = false
+                state.hasErrorUpdating = false
+            } else {
+                state.hasErrorUpdating = true
+            }
+        }
+    }
+
+    private func markBreedAsFavorite(_ breed: Breed) {
+        Task {
+            defer {
+                state.isUpdating = false
+            }
+
+            let success = await favoritesManager.addFavorite(breed)
+            if success {
+                state.isFavorite = true
+                state.hasErrorUpdating = false
+            } else {
+                state.hasErrorUpdating = true
+            }
         }
     }
 }

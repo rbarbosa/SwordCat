@@ -35,8 +35,10 @@ struct CatBreedsView: View {
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .searchPresentationToolbarBehavior(.avoidHidingContent)
-        .sheet(item: viewModel.destinationBinding(for: \.detail)) { detailState in
-            CatBreedDetailView(viewModel: .init(initialState: detailState))
+        .sheet(
+            item: viewModel.destinationBinding(for: \.detail)
+        ) { viewModel in
+            CatBreedDetailView(viewModel: viewModel)
         }
         .onChange(of: searchText) { oldValue, newValue in
             if oldValue != newValue {

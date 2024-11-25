@@ -25,7 +25,7 @@ final class CatBreedFavoritesViewModel {
 
     @CasePathable
     enum Destination {
-        case detail(CatBreedDetailViewModel.State)
+        case detail(CatBreedDetailViewModel)
     }
 
     // MARK: - State
@@ -34,7 +34,6 @@ final class CatBreedFavoritesViewModel {
         var destination: Destination?
         var isLoading: Bool = false
         var favorites: IdentifiedArrayOf<Breed> = []
-        var favoritesFetched: [FavoriteBreed] // Rename to just favorites
         let user: User = .init()
 
         fileprivate var didInitialFetch: Bool = false
@@ -71,8 +70,14 @@ final class CatBreedFavoritesViewModel {
             state.favorites.insert(breed, at: 0)
 
         case .breedCardTapped(let breed):
-            let detailState = CatBreedDetailViewModel.State(breed: breed, isFavorite: true)
-            state.destination = .detail(detailState)
+            let viewModel = CatBreedDetailViewModel(
+                initialState: .init(
+                    breed: breed,
+                    isFavorite: true
+                ),
+                favoritesManager: favoritesManager
+            )
+            state.destination = .detail(viewModel)
 
         case .onAppear:
             if !state.didInitialFetch {

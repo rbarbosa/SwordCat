@@ -17,8 +17,8 @@ struct CatBreedFavoritesView: View {
                 .navigationTitle("Favorites")
                 .navigationBarTitleDisplayMode(.inline)
                 .sheet(item: viewModel.destinationBinding(for: \.detail)
-                ) { detailState in
-                    CatBreedDetailView(viewModel: .init(initialState: detailState))
+                ) { viewModel in
+                    CatBreedDetailView(viewModel: viewModel)
                 }
 
         }
