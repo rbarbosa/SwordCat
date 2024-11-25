@@ -36,5 +36,31 @@ extension CatBreedsRepository {
             }
         )
     }
+
+    static var failure: Self {
+        .init(
+            fetchImages: {
+                throw NetworkingError.invalidResponse
+            },
+            fetchBreeds: { _ in
+                throw NetworkingError.invalidResponse
+            },
+            searchBreeds: { _ in
+                throw NetworkingError.invalidResponse
+            },
+            markAsFavorite: { _, _ in
+                throw NetworkingError.invalidResponse
+            },
+            markAsUnfavorite: { _ in
+                .init(success: false)
+            },
+            fetchFavorites: { _ in
+                throw NetworkingError.invalidResponse
+            },
+            fetchImage: { _ in
+                throw NetworkingError.invalidResponse
+            }
+        )
+    }
 }
 #endif
