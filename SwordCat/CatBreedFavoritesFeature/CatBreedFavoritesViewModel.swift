@@ -167,6 +167,7 @@ final class CatBreedFavoritesViewModel {
         }
     }
 
+    @MainActor
     private func loadImage(for breed: Breed) async {
         if let image = await imageCache.image(for: breed.url) {
             state.imageStates[breed.id] = .loaded(image)
