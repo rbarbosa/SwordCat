@@ -20,7 +20,6 @@ struct CatBreedFavoritesView: View {
                 ) { viewModel in
                     CatBreedDetailView(viewModel: viewModel)
                 }
-
         }
         .onAppear {
             viewModel.send(.onAppear)
@@ -56,6 +55,9 @@ struct CatBreedFavoritesView: View {
             LazyVStack(alignment: .leading) {
                 ForEach(viewModel.state.favorites) { favorite in
                     breedCard(favorite)
+                        .onAppear {
+                            viewModel.send(.breedCardAppeared(favorite))
+                        }
                         .onTapGesture {
                             viewModel.send(.breedCardTapped(favorite))
                         }
@@ -67,7 +69,7 @@ struct CatBreedFavoritesView: View {
 
     private func breedCard(_ breed: Breed) -> some View {
         HStack(alignment: .top) {
-            image(for: breed)
+            imageCard(for: breed)
 
             VStack(alignment: .leading, spacing: 20) {
                 Text(breed.name)
@@ -83,19 +85,31 @@ struct CatBreedFavoritesView: View {
         }
     }
 
-    private func image(for breed: Breed) -> some View {
-        AsyncImage(url: breed.url) { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 6.0))
-            } else if phase.error != nil {
-                Image(systemName: "exclamationmark.triangle")
-            } else {
+    private func imageCard(for breed: Breed) -> some View {
+        ZStack {
+            Rectangle()
+                .fill(Color.gray.opacity(0.3))
+                .frame(width: 150, height: 150)
+
+            switch viewModel.state.imageState(for: breed) {
+            case .loading:
                 ProgressView()
+
+            case .loaded(let uIImage):
+                Image(uiImage: uIImage)
+                    .resizable()
+
+            case .error:
+                Image(systemName: "exclamationmark.triangle")
             }
+
         }
+        .contentShape(Rectangle())
         .frame(width: 150, height: 150)
+        .onTapGesture {
+            viewModel.send(.breedCardTapped(breed))
+
+        }
     }
 }
 

@@ -10,6 +10,7 @@ import Foundation
 import IdentifiedCollections
 import struct SwiftUI.Binding
 import SwiftUICore
+import class UIKit.UIImage
 
 
 /*
@@ -18,6 +19,12 @@ import SwiftUICore
     B1 - We fetch the favorites -> get image_ids
     B2 - We fetch images -> get breeds
  */
+
+enum ImageState {
+    case loading
+    case loaded(UIImage)
+    case error
+}
 
 @Observable
 final class CatBreedFavoritesViewModel {
@@ -36,14 +43,20 @@ final class CatBreedFavoritesViewModel {
         var isLoading: Bool = false
         var favorites: IdentifiedArrayOf<Breed> = []
         let user: User = .init()
+        var imageStates: [String: ImageState] = [:]
 
         fileprivate var didInitialFetch: Bool = false
+
+        func imageState(for breed: Breed) -> ImageState {
+            imageStates[breed.id] ?? .loading
+        }
     }
 
     // MARK: - Action
 
     enum Action {
         case addFavorite(Breed)
+        case breedCardAppeared(Breed)
         case breedCardTapped(Breed)
         case detailBreedAction(CatBreedDetailViewModel.Action.Delegate)
         case onAppear
@@ -53,6 +66,7 @@ final class CatBreedFavoritesViewModel {
     private(set) var state: State
     private let repository: CatBreedsRepository
     private var favoritesManager: FavoritesManager
+    private let imageCache: ImageCache = .shared
 
     // MARK: - Initialization
 
@@ -72,7 +86,9 @@ final class CatBreedFavoritesViewModel {
             _ = withAnimation(.easeIn) {
                 state.favorites.insert(breed, at: 0)
             }
-            state.favorites.insert(breed, at: 0)
+
+        case .breedCardAppeared(let breed):
+            handleBreedCardAppeared(breed)
 
         case .breedCardTapped(let breed):
             let viewModel = CatBreedDetailViewModel(
@@ -134,6 +150,42 @@ final class CatBreedFavoritesViewModel {
             } else {
                 self.send(.removeFavorite(breed))
             }
+        }
+    }
+
+    private func handleBreedCardAppeared(_ breed: Breed) {
+        // handle first time -> load
+        if let imageState = state.imageStates[breed.id] {
+            switch imageState {
+            case .loaded: return
+            case .loading: return
+            case .error: break
+            }
+        }
+
+        Task {
+            await loadImage(for: breed)
+        }
+    }
+
+    private func loadImage(for breed: Breed) async {
+        if let image = await imageCache.image(for: breed.url) {
+            state.imageStates[breed.id] = .loaded(image)
+            return
+        }
+
+        state.imageStates[breed.id] = .loading
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: breed.url)
+            if let image = UIImage(data: data) {
+                await imageCache.setImage(image, for: breed.url)
+                state.imageStates[breed.id] = .loaded(image)
+            } else {
+                state.imageStates[breed.id] = .error
+            }
+        } catch {
+            state.imageStates[breed.id] = .error
         }
     }
 }
