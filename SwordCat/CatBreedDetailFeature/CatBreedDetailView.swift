@@ -11,6 +11,8 @@ struct CatBreedDetailView: View {
 
     let viewModel: CatBreedDetailViewModel
 
+    @State private var uiImage: UIImage?
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -18,6 +20,8 @@ struct CatBreedDetailView: View {
                     Text(viewModel.state.breed.name)
                         .font(.largeTitle)
                         .padding()
+
+                    imageView()
 
                     GroupBox("Origin") {
 
@@ -43,12 +47,27 @@ struct CatBreedDetailView: View {
                     }
 
                 }
+                .padding(.bottom, 20.0)
             }
             .navigationTitle("\(viewModel.state.breed.name) details")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .task {
+            uiImage = await viewModel.state.image()
+        }
         .onDisappear {
             viewModel.send(.onDisappear)
+        }
+    }
+
+    @ViewBuilder
+    private func imageView() -> some View {
+        if let uiImage {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 200)
+                .clipped()
         }
     }
 

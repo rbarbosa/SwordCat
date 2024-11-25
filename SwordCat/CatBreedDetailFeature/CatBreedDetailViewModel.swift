@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import class UIKit.UIImage
 
 @Observable
 final class CatBreedDetailViewModel: Identifiable {
@@ -22,10 +23,17 @@ final class CatBreedDetailViewModel: Identifiable {
 
         fileprivate var initialFavoriteState: Bool
 
-        init(breed: Breed, isFavorite: Bool) {
+        init(
+            breed: Breed,
+            isFavorite: Bool
+        ) {
             self.breed = breed
             self.isFavorite = isFavorite
             self.initialFavoriteState = isFavorite
+        }
+
+        func image() async -> UIImage? {
+            await ImageCache.shared.image(for: breed.url)
         }
     }
 
@@ -75,7 +83,7 @@ final class CatBreedDetailViewModel: Identifiable {
     }
 
     // MARK: - Private methods
-    
+
     private func markBreedAsUnfavorite(_ breed: Breed) {
         Task {
             defer {
