@@ -45,6 +45,7 @@ final class CatBreedsViewModel {
         fileprivate var didFirstAppear: Bool = false
         fileprivate var fetchedBreeds: [Breed] = []
         fileprivate var filteredBreeds: [Breed] = []
+        fileprivate var updatingFavoriteBreedIds: Set<String> = []
 
         mutating func updateThresholdItemId() {
             let index = breeds.count - 3
@@ -55,6 +56,10 @@ final class CatBreedsViewModel {
 
         func isFavorite(_ breed: Breed) -> Bool {
             favoriteBreedIds.contains(breed.referenceImageId)
+        }
+
+        func isUpdatingFavoriteBreed(_ breed: Breed) -> Bool {
+            updatingFavoriteBreedIds.contains(breed.id)
         }
     }
 
@@ -106,7 +111,6 @@ final class CatBreedsViewModel {
             state.destination = .detail(detailState)
 
         case .favoriteButtonTapped(let breed):
-            print("Favorite button tapped for \(breed.name)")
             handleFavoriteTapped(breed)
 
         case .search(let query):
@@ -172,6 +176,8 @@ final class CatBreedsViewModel {
     }
 
     private func handleFavoriteTapped(_ breed: Breed) {
+        state.updatingFavoriteBreedIds.insert(breed.id)
+
         if state.favoriteBreedIds.contains(breed.referenceImageId) {
             markBreedAsUnfavorite(breed)
         } else {
@@ -182,6 +188,7 @@ final class CatBreedsViewModel {
     private func markBreedAsFavorite(_ breed: Breed) {
         Task {
             let success = await favoritesManager.addFavorite(breed)
+            state.updatingFavoriteBreedIds.remove(breed.id)
             if success {
                 state.favoriteBreedIds.insert(breed.referenceImageId)
                 parentActionHandler(.didFavorite(breed))
@@ -192,6 +199,7 @@ final class CatBreedsViewModel {
     private func markBreedAsUnfavorite(_ breed: Breed) {
         Task {
             let success = await favoritesManager.removeFavorite(breed)
+            state.updatingFavoriteBreedIds.remove(breed.id)
             if success {
                 state.favoriteBreedIds.remove(breed.referenceImageId)
                 parentActionHandler(.didUnfavorite(breed))

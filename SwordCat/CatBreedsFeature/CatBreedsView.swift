@@ -58,12 +58,15 @@ struct CatBreedsView: View {
                 Text(breed.name)
                     .font(.title2)
 
-                // TODO: - Add a progress view for the favoriting process
-                Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
-                    .font(.system(size: 20))
-                    .onTapGesture {
-                        viewModel.send(.favoriteButtonTapped(breed))
-                    }
+                if viewModel.state.isUpdatingFavoriteBreed(breed) {
+                    ProgressView()
+                } else {
+                    Image(systemName: viewModel.state.isFavorite(breed) ? "star.fill" : "star")
+                        .font(.system(size: 20))
+                        .onTapGesture {
+                            viewModel.send(.favoriteButtonTapped(breed))
+                        }
+                }
             }
         }
         .onAppear {
