@@ -9,6 +9,7 @@ import CasePaths
 import Foundation
 import struct SwiftUI.Binding
 
+// TODO: - Move this to Models
 struct Pagination {
     var hasMoreItems: Bool = true
     var limit: Int = 10
@@ -37,7 +38,7 @@ final class CatBreedsViewModel {
 
         var isLoading: Bool = false
         var isSearching: Bool = false
-        var favoriteBreedIds: [String: Int] = [:]
+        var favoriteBreedIds: Set<String> = []
         var pagination: Pagination = .init()
         let user: User = .init()
 
@@ -53,8 +54,7 @@ final class CatBreedsViewModel {
         }
 
         func isFavorite(_ breed: Breed) -> Bool {
-            guard let _ = favoriteBreedIds[breed.id] else { return false }
-            return true
+            favoriteBreedIds.contains(breed.referenceImageId)
         }
     }
 
@@ -125,6 +125,10 @@ final class CatBreedsViewModel {
             do {
                 let response = try await repository.fetchBreeds(page)
 
+                // This should only be needed once... confirm
+                let favoriteImageIds = await favoritesManager.favoriteImageIds
+                state.favoriteBreedIds = .init(favoriteImageIds.keys)
+
                 state.isLoading = false
                 state.fetchedBreeds.append(contentsOf: response.breeds)
 
@@ -160,8 +164,8 @@ final class CatBreedsViewModel {
     }
 
     private func handleFavoriteTapped(_ breed: Breed) {
-        if let value = state.favoriteBreedIds[breed.id] {
-            markBreedAsUnfavorite(breed, id: value)
+        if state.favoriteBreedIds.contains(breed.referenceImageId) {
+            markBreedAsUnfavorite(breed)
         } else {
             markBreedAsFavorite(breed)
         }
@@ -169,20 +173,18 @@ final class CatBreedsViewModel {
 
     private func markBreedAsFavorite(_ breed: Breed) {
         Task {
-            do {
-                let response  = try await repository.markAsFavorite(state.user.id, breed.referenceImageId)
-                state.favoriteBreedIds[breed.id] = response.id
-            } catch {
-                print("Error marking breed as favorite: \(error)")
+            let success = await favoritesManager.addFavorite(breed)
+            if success {
+                state.favoriteBreedIds.insert(breed.referenceImageId)
             }
         }
     }
 
-    private func markBreedAsUnfavorite(_ breed: Breed, id: Int) {
+    private func markBreedAsUnfavorite(_ breed: Breed) {
         Task {
-            let response = await repository.markAsUnfavorite(id)
-            if response.success {
-                state.favoriteBreedIds[breed.id] = nil
+            let success = await favoritesManager.removeFavorite(breed)
+            if success {
+                state.favoriteBreedIds.remove(breed.referenceImageId)
             }
         }
     }
