@@ -14,10 +14,6 @@ extension CatBreedsRepository {
         let networking = Networking()
 
         return .init(
-            fetchImages: {
-                let data = try await networking.fetch(query: .images(page: 0))
-                return try makeImagesRepositoryResponse(from: data)
-            },
             fetchBreeds: { page in
                 let data = try await networking.fetch(query: .breeds(page: page))
                 return try makeBreedsRepositoryResponse(from: data)
@@ -25,30 +21,6 @@ extension CatBreedsRepository {
             searchBreeds: { query in
                 let data = try await networking.fetch(query: .searchBreed(query))
                 return try makeBreedsRepositoryResponse(from: data)
-            },
-            markAsFavorite: { userId, imageId in
-                let input = MarkFavoriteInput(userId: userId, imageId: imageId)
-                let data = try await networking.perform(mutationQuery: .markFavorite(input))
-                return try makeMarkAsFavoriteRepositoryResponse(from: data)
-            },
-            markAsUnfavorite: { favoriteId in
-                do {
-                   _ = try await networking.perform(mutationQuery: .unfavorite(favoriteId: favoriteId))
-                    return .init(success: true)
-                } catch {
-                    return .init(success: false)
-                }
-            },
-            fetchFavorites: { userId in
-                let data = try await networking.fetch(query: .favorites)
-                let response = try makeFavoritesRepositoryResponse(from: data)
-                let favorites = response.favorites.filter { $0.subId == userId }
-                return .init(favorites: favorites)
-            },
-            fetchImage: { imageId in
-                let data = try await networking.fetch(query: .image(imageId: imageId))
-                let response = try makeImageRepositoryResponse(from: data)
-                return .init(breed: response.breed)
             }
         )
     }

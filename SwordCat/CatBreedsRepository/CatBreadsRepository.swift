@@ -8,17 +8,7 @@
 import Foundation
 
 struct CatBreedsRepository {
-    var fetchImages: () async throws -> ImagesRepositoryResponse
-
     var fetchBreeds: (_ page: Int) async throws -> BreedsRepositoryResponse
 
     var searchBreeds: (_ query: String) async throws -> BreedsRepositoryResponse
-
-    var markAsFavorite: (_ userId: String, _ imageId: String) async throws -> MarkAsFavoriteRepositoryResponse
-
-    var markAsUnfavorite: (_ id: Int) async -> MarkAsUnfavoriteRepositoryResponse
-
-    var fetchFavorites: (_ userId: String) async throws -> FavoritesRepositoryResponse
-
-    var fetchImage: (_ imageId: String) async throws -> ImageRepositoryResponse
 }
