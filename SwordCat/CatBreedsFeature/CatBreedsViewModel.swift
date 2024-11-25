@@ -35,7 +35,7 @@ final class CatBreedsViewModel {
             isSearching ? filteredBreeds : fetchedBreeds
         }
         var destination: Destination?
-
+        var hasFetchingError: Bool = false
         var isLoading: Bool = false
         var isSearching: Bool = false
         var favoriteBreedIds: Set<String> = []
@@ -74,6 +74,7 @@ final class CatBreedsViewModel {
         case breedCardTapped(Breed)
         case detailBreedAction(CatBreedDetailViewModel.Action.Delegate)
         case favoriteButtonTapped(Breed)
+        case retryButtonTapped
         case search(String)
         case onAppear
         case onCardBreedAppear(Breed)
@@ -131,6 +132,9 @@ final class CatBreedsViewModel {
         case .favoriteButtonTapped(let breed):
             handleFavoriteTapped(breed)
 
+        case .retryButtonTapped:
+            fetchBreeds(page: state.pagination.nextPage)
+
         case .search(let query):
             state.isSearching = !query.isEmpty
             search(query.lowercased())
@@ -146,14 +150,18 @@ final class CatBreedsViewModel {
             fetchBreeds(page: 0)
 
         case .onCardBreedAppear(let breed):
-            print("Card breed \(breed.name) appeared")
             handleItemAppeared(breed)
         }
     }
 
     private func fetchBreeds(page: Int) {
         state.isLoading = true
+
         Task {
+            defer {
+                state.isLoading = false
+            }
+
             do {
                 let response = try await repository.fetchBreeds(page)
 
@@ -161,7 +169,6 @@ final class CatBreedsViewModel {
                 let favoriteImageIds = await favoritesManager.favoriteImageIds
                 state.favoriteBreedIds = .init(favoriteImageIds.keys)
 
-                state.isLoading = false
                 state.fetchedBreeds.append(contentsOf: response.breeds)
 
                 state.pagination.hasMoreItems = response.breeds.count > 0
@@ -171,14 +178,9 @@ final class CatBreedsViewModel {
                 } else {
                     state.pagination.thresholdItemId = nil
                 }
+                state.hasFetchingError = false
             } catch {
-                state.isLoading = false
-                // If the fetch failed for first page, and while we don't have a button to retry, let's enable
-                // fetch for next page
-                if state.pagination.nextPage == 0 {
-                    state.didFirstAppear = false
-                }
-                print("Got error fetching breeds: \(error)")
+                state.hasFetchingError = true
             }
         }
     }

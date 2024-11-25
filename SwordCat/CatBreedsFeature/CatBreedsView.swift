@@ -24,6 +24,7 @@ struct CatBreedsView: View {
                             }
                     }
                     // TODO: - Add last card with loading/error states
+                    lastRow()
                 }
                 .padding(.horizontal)
             }
@@ -97,11 +98,41 @@ struct CatBreedsView: View {
         }
         .frame(width: 150, height: 150)
     }
+
+    @ViewBuilder
+    private func lastRow() -> some View {
+        if viewModel.isLoading {
+            ProgressView()
+                .frame(maxWidth: .infinity, alignment: .center)
+        } else if viewModel.hasFetchingError {
+            retryButton()
+        }
+    }
+
+    private func retryButton() -> some View {
+        VStack {
+            Button {
+                viewModel.send(.retryButtonTapped)
+            } label: {
+                Text("Retry")
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 2)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(viewModel.state.isLoading)
+
+
+            Text("Failed to fetch cat breeds")
+                .font(.subheadline)
+                .foregroundStyle(.red.opacity(0.9))
+        }
+    }
 }
 
 // MARK: - Previews
 
-#Preview {
+#Preview("Sucess") {
     CatBreedsView(
         viewModel: .init(
             initialState: .init(),
@@ -111,3 +142,15 @@ struct CatBreedsView: View {
         )
     )
 }
+
+#Preview("Failure") {
+    CatBreedsView(
+        viewModel: .init(
+            initialState: .init(),
+            repository: .failure,
+            favoritesManager: .init(repository: .live, user: .init()),
+            parentActionHandler: { _ in }
+        )
+    )
+}
+
