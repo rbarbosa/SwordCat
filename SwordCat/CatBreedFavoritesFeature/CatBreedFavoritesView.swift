@@ -86,30 +86,11 @@ struct CatBreedFavoritesView: View {
     }
 
     private func imageCard(for breed: Breed) -> some View {
-        ZStack {
-            Rectangle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 150, height: 150)
+        BreedImageView(state: viewModel.state.imageState(for: breed))
+            .onTapGesture {
+                viewModel.send(.breedCardTapped(breed))
 
-            switch viewModel.state.imageState(for: breed) {
-            case .loading:
-                ProgressView()
-
-            case .loaded(let uIImage):
-                Image(uiImage: uIImage)
-                    .resizable()
-
-            case .error:
-                Image(systemName: "exclamationmark.triangle")
             }
-
-        }
-        .contentShape(Rectangle())
-        .frame(width: 150, height: 150)
-        .onTapGesture {
-            viewModel.send(.breedCardTapped(breed))
-
-        }
     }
 }
 
