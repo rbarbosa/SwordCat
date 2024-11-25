@@ -7,6 +7,7 @@
 
 import CasePaths
 import Foundation
+import IdentifiedCollections
 import struct SwiftUI.Binding
 
 
@@ -32,7 +33,7 @@ final class CatBreedFavoritesViewModel {
     struct State {
         var destination: Destination?
         var isLoading: Bool = false
-        var favorites: [Breed] = []
+        var favorites: IdentifiedArrayOf<Breed> = []
         var favoritesFetched: [FavoriteBreed] // Rename to just favorites
         let user: User = .init()
     }
@@ -67,37 +68,22 @@ final class CatBreedFavoritesViewModel {
             state.destination = .detail(detailState)
 
         case .onAppear:
-            fetchFavorites()
+            fetchFavoriteBreeds()
         }
     }
 
     // MARK: - Private methods
 
-    func fetchFavorites() {
+    func fetchFavoriteBreeds() {
         state.isLoading = true
+
         Task {
             defer {
                 state.isLoading = false
             }
-
+            
             do {
-                let response = try await repository.fetchFavorites(state.user.id)
-
-                var newFavorites: [FavoriteBreed] = []
-                if state.favoritesFetched.isEmpty {
-                    newFavorites = response.favorites
-                } else {
-                    newFavorites = response.favorites.filter { new in
-                        !state.favoritesFetched.contains(where: { $0.id == new.id })
-                    }
-                }
-
-                for favorite in newFavorites {
-                    let response = try await repository.fetchImage(favorite.imageId)
-                    state.favorites.append(response.breed)
-                }
-
-                state.favoritesFetched.append(contentsOf: newFavorites)
+                state.favorites = try await favoritesManager.fetchFavoriteBreeds()
             } catch {
                 print("Error fetching favorites: \(error.localizedDescription)")
             }

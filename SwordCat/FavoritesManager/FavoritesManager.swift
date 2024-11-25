@@ -23,6 +23,8 @@ actor FavoritesManager {
     /// Handy dictionary where the key is the `imageId` and the value is favorite `id`
     var favoriteImageIds: [String: Int] = [:]
 
+    private var didFetchFavoriteIds: Bool = false
+
     let repository: FavoritesRepository
     let user: User
 
@@ -76,7 +78,23 @@ actor FavoritesManager {
         for favorite in newFavorites {
             favoriteImageIds[favorite.imageId] = favorite.id
         }
+
+        didFetchFavoriteIds = true
+
         return favoritesImage
+    }
+
+    func fetchFavoriteBreeds() async throws -> IdentifiedArrayOf<Breed> {
+        if !didFetchFavoriteIds {
+            _ = try await fetchFavoriteImageIds()
+        }
+
+        for imageId in favoriteImageIds.keys {
+            let response = try await repository.fetchBreedImage(imageId)
+            favoriteBreeds.append(response.breed)
+        }
+
+        return favoriteBreeds
     }
 
     func addFavorite(_ breed: Breed) async -> Bool {

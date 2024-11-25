@@ -13,29 +13,57 @@ struct CatBreedFavoritesView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(alignment: .leading) {
-                    ForEach(viewModel.state.favorites) { favorite in
-                        breedCard(favorite)
-                            .onTapGesture {
-                                viewModel.send(.breedCardTapped(favorite))
-                            }
-                    }
+            contentView()
+                .navigationTitle("Favorites")
+                .navigationBarTitleDisplayMode(.inline)
+                .sheet(item: viewModel.destinationBinding(for: \.detail)
+                ) { detailState in
+                    CatBreedDetailView(viewModel: .init(initialState: detailState))
                 }
-                .padding(.horizontal)
-            }
-            .navigationTitle("Favorites")
-            .navigationBarTitleDisplayMode(.inline)
-            .sheet(item: viewModel.destinationBinding(for: \.detail)) { detailState in
-                CatBreedDetailView(viewModel: .init(initialState: detailState))
-            }
-            .onAppear {
-                viewModel.send(.onAppear)
-            }
+
+        }
+        .onAppear {
+            viewModel.send(.onAppear)
         }
     }
 
     // MARK: - Subviews
+
+    @ViewBuilder
+    private func contentView() -> some View {
+        if viewModel.state.isLoading {
+            VStack(spacing: 16) {
+                HStack {
+                    Text("Getting your favorites...")
+                        .font(.title)
+
+                    Image(systemName: "heart.fill")
+                        .font(.title2)
+                        .foregroundStyle(.red.opacity(0.9))
+                        .symbolEffect(.pulse, options: .repeat(.continuous))
+                }
+
+                ProgressView()
+            }
+
+        } else {
+            breedList()
+        }
+    }
+
+    private func breedList() -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                ForEach(viewModel.state.favorites) { favorite in
+                    breedCard(favorite)
+                        .onTapGesture {
+                            viewModel.send(.breedCardTapped(favorite))
+                        }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
 
     private func breedCard(_ breed: Breed) -> some View {
         HStack(alignment: .top) {
