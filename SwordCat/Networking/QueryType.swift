@@ -11,7 +11,6 @@ import Foundation
 
 enum QueryType {
     case image(imageId: String)
-    case images(page: Int)
     case breeds(page: Int)
     case searchBreed(String)
     case favorites
@@ -19,7 +18,6 @@ enum QueryType {
     var path: String {
         switch self {
         case .image(let imageId): "images/\(imageId)"
-        case .images: "images/search"
         case .breeds: "breeds"
         case .searchBreed: "breeds/search"
         case .favorites: "favourites"
@@ -32,11 +30,6 @@ enum QueryType {
         switch self {
         case .image:
             break
-
-        case .images(page: let page):
-            items.append(.init(name: "page", value: String(page)))
-            items.append(.init(name: "limit", value: "10"))
-            items.append(.init(name: "has_breeds", value: "1"))
 
         case .breeds(page: let page):
             items.append(.init(name: "page", value: String(page)))
@@ -64,8 +57,6 @@ enum MutationQueryType {
 
         case .unfavorite(let favoriteId):
             "favourites/\(favoriteId)"
-
-        
         }
     }
 
@@ -80,10 +71,9 @@ enum MutationQueryType {
         switch self {
         case .markFavorite(let input):
             try JSONEncoder().encode(input)
+
         case .unfavorite:
             nil
         }
     }
 }
-
-
