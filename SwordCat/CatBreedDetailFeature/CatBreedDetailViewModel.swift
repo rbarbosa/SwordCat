@@ -10,11 +10,6 @@ import Foundation
 @Observable
 final class CatBreedDetailViewModel: Identifiable {
 
-    // MARK: - Destination
-
-    enum Destination {
-    }
-
     // MARK: - State
 
     struct State: Identifiable {
@@ -79,6 +74,8 @@ final class CatBreedDetailViewModel: Identifiable {
         }
     }
 
+    // MARK: - Private methods
+    
     private func markBreedAsUnfavorite(_ breed: Breed) {
         Task {
             defer {
