@@ -47,6 +47,9 @@ struct CatBreedDetailView: View {
             .navigationTitle("\(viewModel.state.breed.name) details")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .onDisappear {
+            viewModel.send(.onDisappear)
+        }
     }
 
     private func favoriteButton() -> some View {
@@ -92,7 +95,8 @@ struct CatBreedDetailView: View {
             favoritesManager: .init(
                 repository: .live,
                 user: .init()
-            )
+            ),
+            parentActionHandler: { _ in }
         )
     )
 }

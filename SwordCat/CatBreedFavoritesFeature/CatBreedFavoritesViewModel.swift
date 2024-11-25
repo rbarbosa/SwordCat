@@ -9,6 +9,7 @@ import CasePaths
 import Foundation
 import IdentifiedCollections
 import struct SwiftUI.Binding
+import SwiftUICore
 
 
 /*
@@ -44,6 +45,7 @@ final class CatBreedFavoritesViewModel {
     enum Action {
         case addFavorite(Breed)
         case breedCardTapped(Breed)
+        case detailBreedAction(CatBreedDetailViewModel.Action.Delegate)
         case onAppear
         case removeFavorite(Breed)
     }
@@ -67,6 +69,9 @@ final class CatBreedFavoritesViewModel {
     func send(_ action: Action) {
         switch action {
         case .addFavorite(let breed):
+            _ = withAnimation(.easeIn) {
+                state.favorites.insert(breed, at: 0)
+            }
             state.favorites.insert(breed, at: 0)
 
         case .breedCardTapped(let breed):
@@ -75,9 +80,15 @@ final class CatBreedFavoritesViewModel {
                     breed: breed,
                     isFavorite: true
                 ),
-                favoritesManager: favoritesManager
+                favoritesManager: favoritesManager,
+                parentActionHandler: { [weak self] in
+                    self?.send(.detailBreedAction($0))
+                }
             )
             state.destination = .detail(viewModel)
+
+        case .detailBreedAction(let delegateAction):
+            handleBreedDetailDelegateAction(delegateAction)
 
         case .onAppear:
             if !state.didInitialFetch {
@@ -87,7 +98,9 @@ final class CatBreedFavoritesViewModel {
             }
 
         case .removeFavorite(let breed):
-            state.favorites.remove(id: breed.id)
+            _ = withAnimation(.easeOut) {
+                state.favorites.remove(id: breed.id)
+            }
         }
     }
 
@@ -106,6 +119,20 @@ final class CatBreedFavoritesViewModel {
             } catch {
                 state.didInitialFetch = false
                 print("Error fetching favorites: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleBreedDetailDelegateAction(_ action: CatBreedDetailViewModel.Action.Delegate) {
+        switch action {
+        case .didDismiss(let breed, let newFavoriteState):
+            guard let newFavoriteState else { return }
+            let isFavorite = newFavoriteState
+            if isFavorite {
+                // This shouldn't happen...
+                send(.addFavorite(breed))
+            } else {
+                self.send(.removeFavorite(breed))
             }
         }
     }

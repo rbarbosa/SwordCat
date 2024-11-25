@@ -24,29 +24,51 @@ final class CatBreedDetailViewModel: Identifiable {
         var hasErrorUpdating: Bool = false
 
         var id: String { breed.id }
+
+        fileprivate var initialFavoriteState: Bool
+
+        init(breed: Breed, isFavorite: Bool) {
+            self.breed = breed
+            self.isFavorite = isFavorite
+            self.initialFavoriteState = isFavorite
+        }
     }
 
     // MARK: - Action
 
     enum Action {
+        case onDisappear
         case toggleFavorite
+
+        enum Delegate {
+            case didDismiss(breed: Breed, newFavoriteState: Bool?)
+        }
     }
 
     private(set) var state: State
     private var favoritesManager: FavoritesManager
+    let parentActionHandler: (Action.Delegate) -> Void
 
     // MARK: - Initialization
 
     init(
         initialState: State,
-        favoritesManager: FavoritesManager
+        favoritesManager: FavoritesManager,
+        parentActionHandler: @escaping (Action.Delegate) -> Void
     ) {
         self.state = initialState
         self.favoritesManager = favoritesManager
+        self.parentActionHandler = parentActionHandler
     }
 
     func send(_ action: Action) {
         switch action {
+        case .onDisappear:
+            let isNewState = state.isFavorite != state.initialFavoriteState ? state.isFavorite : nil
+            parentActionHandler(
+                .didDismiss(breed: state.breed, newFavoriteState: isNewState)
+            )
+
         case .toggleFavorite:
             state.isUpdating = true
             if state.isFavorite {

@@ -72,6 +72,7 @@ final class CatBreedsViewModel {
 
     enum Action {
         case breedCardTapped(Breed)
+        case detailBreedAction(CatBreedDetailViewModel.Action.Delegate)
         case favoriteButtonTapped(Breed)
         case search(String)
         case onAppear
@@ -117,9 +118,15 @@ final class CatBreedsViewModel {
                     breed: breed,
                     isFavorite: isFavorite
                 ),
-                favoritesManager: favoritesManager
+                favoritesManager: favoritesManager,
+                parentActionHandler: { [weak self] in
+                    self?.send(.detailBreedAction($0))
+                }
             )
             state.destination = .detail(viewModel)
+
+        case .detailBreedAction(let delegateAction):
+            handleBreedDetailDelegateAction(delegateAction)
 
         case .favoriteButtonTapped(let breed):
             handleFavoriteTapped(breed)
@@ -255,6 +262,18 @@ final class CatBreedsViewModel {
             } catch {
                 state.isLoading = false
                 print("Error searching breeds: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func handleBreedDetailDelegateAction(_ action: CatBreedDetailViewModel.Action.Delegate) {
+        switch action {
+        case .didDismiss(_, let newFavoriteState):
+            guard let _ = newFavoriteState else { return }
+
+            Task {
+                let favoriteImageIds = await favoritesManager.favoriteImageIds
+                state.favoriteBreedIds = .init(favoriteImageIds.keys)
             }
         }
     }
