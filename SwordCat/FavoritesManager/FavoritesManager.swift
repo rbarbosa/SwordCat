@@ -10,10 +10,10 @@ import IdentifiedCollections
 
 actor FavoritesManager {
     // This shouldn't be necessary
-    var favoritesImage: IdentifiedArrayOf<FavoriteImage> = []
-    var favoriteBreeds: IdentifiedArrayOf<Breed> = []
-    var favoriteBreedIds: [String: Int] = [:]
-    
+    private var favoritesImage: IdentifiedArrayOf<FavoriteImage> = []
+    private var favoriteBreeds: IdentifiedArrayOf<Breed> = []
+    private var favoriteBreedIds: [String: Int] = [:]
+
     /// Handy dictionary where the key is the `imageId` and the value is favorite `id`
     var favoriteImageIds: [String: Int] = [:]
 
@@ -30,7 +30,7 @@ actor FavoritesManager {
         self.user = user
     }
 
-    func fetchFavoriteImageIds() async throws -> IdentifiedArrayOf<FavoriteImage> {
+    func fetchUpdateFavoriteImageIds() async throws -> IdentifiedArrayOf<FavoriteImage> {
         let response = try await repository.fetchFavorites(user.id)
         var newFavorites: IdentifiedArrayOf<FavoriteImage> = []
 
@@ -46,6 +46,19 @@ actor FavoritesManager {
         }
 
         for favorite in newFavorites {
+            favoriteImageIds[favorite.imageId] = favorite.id
+        }
+
+        didFetchFavoriteIds = true
+
+        return favoritesImage
+    }
+
+    func fetchFavoriteImageIds() async throws -> IdentifiedArrayOf<FavoriteImage> {
+        let response = try await repository.fetchFavorites(user.id)
+        favoritesImage = .init(uniqueElements: response.favoriteImages)
+
+        for favorite in favoritesImage {
             favoriteImageIds[favorite.imageId] = favorite.id
         }
 
