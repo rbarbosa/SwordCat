@@ -9,4 +9,5 @@ import Testing
 
 extension Tag {
     @Tag static var json: Self
+    @Tag static var viewModels: Self
 }

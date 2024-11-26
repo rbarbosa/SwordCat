@@ -16,8 +16,8 @@ struct FavoriteImage: Identifiable {
 extension FavoriteImage {
     static var mock: Self {
         .init(
-            id: 1,
-            imageId: "imageId"
+            id: 123,
+            imageId: "0XYvRd7oD"
         )
     }
 }
