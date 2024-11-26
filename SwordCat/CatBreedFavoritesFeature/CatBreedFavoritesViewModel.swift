@@ -125,6 +125,7 @@ final class CatBreedFavoritesViewModel {
             do {
                 state.favorites = try await favoritesManager.fetchFavoriteBreeds()
             } catch {
+                // TODO: set error and display a retry button
                 state.didInitialFetch = false
             }
         }
