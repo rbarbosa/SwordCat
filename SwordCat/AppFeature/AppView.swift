@@ -49,6 +49,12 @@ struct AppView: View {
 
 // MARK: - Previews
 
-//#Preview {
-//
-//}
+#Preview {
+    AppView(
+        viewModel: .init(
+            initialState: .init(breeds: .init(), favorites: .init()),
+            catBreedsRepository: .success,
+            favoritesRepository: .success
+        )
+    )
+}

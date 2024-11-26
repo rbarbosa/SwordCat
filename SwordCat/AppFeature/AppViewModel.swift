@@ -32,25 +32,34 @@ final class AppViewModel {
     private(set) var state: State
 
     private let favoritesManager: FavoritesManager
+    private let catBreedsRepository: CatBreedsRepository
+    private let favoritesRepository: FavoritesRepository
+    private let user: User
 
     // MARK: - Initialization
 
     init(
         initialState: State,
-        favoritesManager: FavoritesManager
+        catBreedsRepository: CatBreedsRepository,
+        favoritesRepository: FavoritesRepository,
+        user: User = .init()
     ) {
         self.state = initialState
-        self.favoritesManager = favoritesManager
+        self.catBreedsRepository = catBreedsRepository
+        self.favoritesRepository = favoritesRepository
+        self.user = user
+        favoritesManager = .init(repository: favoritesRepository, user: user)
 
         breedsViewModel = .init(
             initialState: initialState.breeds,
-            repository: .live,
+            repository: catBreedsRepository,
             favoritesManager: favoritesManager,
             parentActionHandler: { _ in }
         )
+
         favoritesViewModel = .init(
             initialState: initialState.favorites,
-            repository: .live,
+            repository: catBreedsRepository,
             favoritesManager: favoritesManager
         )
 
@@ -73,7 +82,7 @@ final class AppViewModel {
     private func setUpChildViewModels() {
         breedsViewModel = .init(
             initialState: state.breeds,
-            repository: .live,
+            repository: catBreedsRepository,
             favoritesManager: favoritesManager,
             parentActionHandler: { [weak self] in
                 self?.send(.breedsViewModel($0))
