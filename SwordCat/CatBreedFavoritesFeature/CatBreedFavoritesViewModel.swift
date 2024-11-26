@@ -12,14 +12,6 @@ import struct SwiftUI.Binding
 import SwiftUICore
 import class UIKit.UIImage
 
-
-/*
- To get the favorites:
-    A - The favorites are injected
-    B1 - We fetch the favorites -> get image_ids
-    B2 - We fetch images -> get breeds
- */
-
 enum ImageState {
     case loading
     case loaded(UIImage)
