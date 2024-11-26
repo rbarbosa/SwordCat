@@ -87,8 +87,11 @@ final class AppViewModel {
 
             do {
                 let _ = try await favoritesManager.fetchFavoriteImageIds()
-                state.isLoading = false
             } catch {
+                // TODO: - Handle this state
+                // We could either retry (by adding a retry button) or we could inform the breeds view model
+                // that need to refresh favorites. While we don't successfully fetch the favorites
+                // we should disable favoriting breeds to prevent inconsistencies
                 print("❌ Error fetching favorites: \(error)")
             }
         }
