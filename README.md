@@ -93,7 +93,11 @@ As mentioned, the solution is not ideal, and not scalable for a larger app where
 The project leverages the new Swift Testing framework, introduced in recent Xcode versions. 
 It was my third contact with it, and I've found, once again, this framework offers enhanced capabilities for test organization and execution, contributing to a robust testing strategy.
 
-## Setup and Installation
+## Setup and Installation - UPDATED
+Since I've exposed the API-KEY, I had to generate a new one and use a config file - `Confif.xcconfig`. To set up the project:
+- rename the file `Config.xcconfig.template` to `Config.xcconfig`
+- get an API key
+- Edit `Config.xcconfig` and replace "your_api_key_here" with the API key
 After installing the Xcode, the process should be seamlessly, and the app should run without problems.
 Note that since there's a default user, you might get already some favorites set.
 
