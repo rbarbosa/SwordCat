@@ -23,7 +23,7 @@ final class Networking {
     }
 
     private let defaultHeaders: [String: String] = [
-        "x-api-key": "live_qMFl2V4oA5s59ECGpAR5Wh15lD72XTdlZ12wMmtvoWI3sqyRKB1hkQ7z3pwb1KVU",
+        "x-api-key": Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? "",
         "Content-Type": "application/json",
     ]
 

@@ -11,6 +11,7 @@
 		33F932932CF35E85001A40EF /* SwiftNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932922CF35E85001A40EF /* SwiftNavigation */; };
 		33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932942CF35E85001A40EF /* SwiftUINavigation */; };
 		33F933932CF3795A001A40EF /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 33F933922CF3795A001A40EF /* IdentifiedCollections */; };
+		33F9372D2CF6A0CE001A40EF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 33F9372C2CF6A0CE001A40EF /* Config.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,11 +35,25 @@
 		33259AB52CEF3B650083F029 /* SwordCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwordCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259AC52CEF3B670083F029 /* SwordCatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwordCatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259ACF2CEF3B670083F029 /* SwordCatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwordCatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		33F9372C2CF6A0CE001A40EF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = Config/Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		33F9372F2CF6A12D001A40EF /* Exceptions for "SwordCat" folder in "SwordCat" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 33259AB42CEF3B650083F029 /* SwordCat */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		33259AB72CEF3B650083F029 /* SwordCat */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				33F9372F2CF6A12D001A40EF /* Exceptions for "SwordCat" folder in "SwordCat" target */,
+			);
 			path = SwordCat;
 			sourceTree = "<group>";
 		};
@@ -86,6 +101,7 @@
 		33259AAC2CEF3B650083F029 = {
 			isa = PBXGroup;
 			children = (
+				33F9372C2CF6A0CE001A40EF /* Config.xcconfig */,
 				33259AB72CEF3B650083F029 /* SwordCat */,
 				33259AC82CEF3B670083F029 /* SwordCatTests */,
 				33259AD22CEF3B670083F029 /* SwordCatUITests */,
@@ -232,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F9372D2CF6A0CE001A40EF /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +427,7 @@
 		};
 		33259ADA2CEF3B670083F029 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33F9372C2CF6A0CE001A40EF /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -419,6 +437,7 @@
 				DEVELOPMENT_TEAM = 2E5CY222L4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwordCat/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -439,6 +458,7 @@
 		};
 		33259ADB2CEF3B670083F029 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33F9372C2CF6A0CE001A40EF /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -448,6 +468,7 @@
 				DEVELOPMENT_TEAM = 2E5CY222L4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SwordCat/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
