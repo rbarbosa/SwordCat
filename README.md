@@ -98,6 +98,7 @@ Since I've exposed the API-KEY, I had to generate a new one and use a config fil
 - rename the file `Config.xcconfig.template` to `Config.xcconfig`
 - get an API key
 - Edit `Config.xcconfig` and replace "your_api_key_here" with the API key
+  
 After installing the Xcode, the process should be seamlessly, and the app should run without problems.
 Note that since there's a default user, you might get already some favorites set.
 
