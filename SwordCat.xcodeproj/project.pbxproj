@@ -12,6 +12,7 @@
 		33F932952CF35E85001A40EF /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 33F932942CF35E85001A40EF /* SwiftUINavigation */; };
 		33F933932CF3795A001A40EF /* IdentifiedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 33F933922CF3795A001A40EF /* IdentifiedCollections */; };
 		33F9372D2CF6A0CE001A40EF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 33F9372C2CF6A0CE001A40EF /* Config.xcconfig */; };
+		33F937332CF6A224001A40EF /* Config.xcconfig.template in Resources */ = {isa = PBXBuildFile; fileRef = 33F937322CF6A224001A40EF /* Config.xcconfig.template */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		33259AC52CEF3B670083F029 /* SwordCatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwordCatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33259ACF2CEF3B670083F029 /* SwordCatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwordCatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33F9372C2CF6A0CE001A40EF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = Config/Config.xcconfig; sourceTree = "<group>"; };
+		33F937322CF6A224001A40EF /* Config.xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.xcconfig.template; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -101,6 +103,7 @@
 		33259AAC2CEF3B650083F029 = {
 			isa = PBXGroup;
 			children = (
+				33F937322CF6A224001A40EF /* Config.xcconfig.template */,
 				33F9372C2CF6A0CE001A40EF /* Config.xcconfig */,
 				33259AB72CEF3B650083F029 /* SwordCat */,
 				33259AC82CEF3B670083F029 /* SwordCatTests */,
@@ -249,6 +252,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33F9372D2CF6A0CE001A40EF /* Config.xcconfig in Resources */,
+				33F937332CF6A224001A40EF /* Config.xcconfig.template in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
